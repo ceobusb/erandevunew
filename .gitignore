@@ -1,0 +1,39 @@
+# macOS sistem dosyaları
+.DS_Store
+
+# Xcode çalışma dosyaları
+build/
+DerivedData/
+*.xcworkspace
+*.xcuserstate
+*.xcuserdata/
+*.xcodeproj/project.xcworkspace/xcuserdata/
+*.xcodeproj/xcuserdata/
+*.xcodeproj/xcshareddata/WorkspaceSettings.xcsettings
+*.xcodeproj/project.xcworkspace/xcshareddata/
+*.xccheckout
+*.xcscheme
+*.xcschememanagement.plist
+
+# SwiftPM / CocoaPods / Carthage
+.swiftpm/
+Package.resolved
+Pods/
+Cartfile.resolved
+Carthage/
+
+# Xcode otomatik log ve debug dosyaları
+*.hmap
+*.ipa
+*.dSYM.zip
+*.dSYM
+
+# Xcode Preview ve cache dosyaları
+*.moved-aside
+*.xcscmblueprint
+
+# IDE config
+.idea/
+
+# App entitlements/config files (ortama özelse dışla)
+*.xcconfig

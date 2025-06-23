@@ -6,8 +6,12 @@ struct Company: Identifiable {
     let color: Color
     let rating: Double
     let description: String
+    let latitude: Double
+    let longitude: Double
     let address: String
     let completedJobs: Int
+    
+    
 
     var initial: String {
         String(name.prefix(1))
@@ -15,11 +19,15 @@ struct Company: Identifiable {
 }
 
 struct Sponsor: Identifiable {
-    let id = UUID()
+    let id: UUID
     let name: String
-    let logoName: String
+    let logoUrl: String
+    let latitude: Double
+    let longitude: Double
     let description: String
     let rating: Double
     let address: String
 }
+
+
 

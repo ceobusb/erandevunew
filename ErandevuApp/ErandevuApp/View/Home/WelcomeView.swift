@@ -19,8 +19,11 @@ struct WelcomeView: View {
           
 
             InfoSliderView() // ← slider burada görünecek
-            
-            SponsorView()
+
+            NavigationStack {
+                
+                SponsorView()
+            }
 
             SectorShowcaseView()
 

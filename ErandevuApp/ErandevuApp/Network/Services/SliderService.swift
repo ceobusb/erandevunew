@@ -6,7 +6,7 @@ class SliderService {
         
         var request = URLRequest(url: url)
         request.httpMethod = "GET"
-        request.setValue("174ce253-a7bb-4ea7-96dc-923824a9937a", forHTTPHeaderField: "X-API-KEY") // ← önemli
+        request.setValue(Endpoints.apikey, forHTTPHeaderField: "X-API-KEY") // ← önemli
 
         URLSession.shared.dataTask(with: request) { data, _, error in // ← düzeltildi
             if let error = error {

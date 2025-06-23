@@ -5,22 +5,34 @@ struct SectorDetailView: View {
 
     var body: some View {
         ScrollView {
-            VStack(spacing: 16) {
-                Image(systemName: sector.icon)
-                    .font(.system(size: 64))
-                    .padding()
-                    .background(sector.color.opacity(0.2))
-                    .clipShape(Circle())
-                    .foregroundColor(sector.color)
+            VStack(spacing: 20) {
+                // Simgeli daire alan
+                ZStack {
+                    Circle()
+                        .fill(Color(hexOrName: sector.color_name).opacity(0.2))
+                        .frame(width: 120, height: 120)
 
+                    Image(systemName: sector.icon)
+                        .resizable()
+                        .scaledToFit()
+                        .frame(width: 50, height: 50)
+                        .foregroundColor(Color(hexOrName: sector.color_name))
+                }
+                .padding(.top, 32)
+
+                // Başlık
                 Text(sector.title)
-                    .font(.largeTitle)
-                    .bold()
+                    .font(.title)
+                    .fontWeight(.bold)
+                    .foregroundColor(.primary)
 
+                // Açıklama
                 Text(sector.description)
                     .font(.body)
+                    .foregroundColor(.secondary)
                     .multilineTextAlignment(.leading)
-                    .padding()
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .padding(.horizontal)
 
                 Spacer()
             }

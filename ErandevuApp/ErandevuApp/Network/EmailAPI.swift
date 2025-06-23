@@ -1,0 +1,110 @@
+import Foundation
+
+class EmailAPI {
+    static func sendKod(email: String, completion: @escaping (Bool, String) -> Void) {
+        guard let url = URL(string: "\(Endpoints.baseURL)/create_firma") else {
+            completion(false, "URL hatalı")
+            return
+        }
+
+        var request = URLRequest(url: url)
+        request.httpMethod = "POST"
+        request.setValue("application/x-www-form-urlencoded", forHTTPHeaderField: "Content-Type")
+        request.setValue("174ce253-a7bb-4ea7-96dc-923824a9937a", forHTTPHeaderField: "X-API-KEY")
+
+        let bodyString = "email=\(email)"
+        request.httpBody = bodyString.data(using: .utf8)
+
+        URLSession.shared.dataTask(with: request) { data, _, _ in
+            if let data = data {
+                let result = try? JSONDecoder().decode(GenericResponse.self, from: data)
+                completion(result?.status ?? false, result?.message ?? "Sunucu hatası")
+            } else {
+                completion(false, "İstek başarısız")
+            }
+        }.resume()
+    }
+
+    static func confirmKod(email: String, kod: String, completion: @escaping (Bool, String) -> Void) {
+        guard let url = URL(string: "\(Endpoints.baseURL)/confirm_firma_kod") else {
+            completion(false, "URL hatalı")
+            return
+        }
+
+        var request = URLRequest(url: url)
+        request.httpMethod = "POST"
+        request.setValue("application/x-www-form-urlencoded", forHTTPHeaderField: "Content-Type")
+        request.setValue("174ce253-a7bb-4ea7-96dc-923824a9937a", forHTTPHeaderField: "X-API-KEY")
+
+        let bodyString = "email=\(email)&kod=\(kod)"
+        request.httpBody = bodyString.data(using: .utf8)
+
+        URLSession.shared.dataTask(with: request) { data, _, _ in
+            if let data = data {
+                let result = try? JSONDecoder().decode(GenericResponse.self, from: data)
+                completion(result?.status ?? false, result?.message ?? "Sunucu hatası")
+            } else {
+                completion(false, "İstek başarısız")
+            }
+        }.resume()
+    }
+    
+    static func sendVerificationCode(email: String, completion: @escaping (Bool, String) -> Void) {
+          guard let url = URL(string: "\(Endpoints.baseURL)/create_firma") else {
+              completion(false, "Geçersiz URL")
+              return
+          }
+
+          var request = URLRequest(url: url)
+          request.httpMethod = "POST"
+          request.setValue(Endpoints.apikey, forHTTPHeaderField: "X-API-KEY")
+          request.setValue("application/x-www-form-urlencoded", forHTTPHeaderField: "Content-Type")
+
+          let postString = "email=\(email)"
+          request.httpBody = postString.data(using: .utf8)
+
+          URLSession.shared.dataTask(with: request) { data, response, error in
+              if let data = data {
+                  if let result = try? JSONDecoder().decode(GenericResponse.self, from: data) {
+                      completion(result.status, result.message)
+                  } else {
+                      completion(false, "Yanıt çözülemedi")
+                  }
+              } else {
+                  completion(false, error?.localizedDescription ?? "Sunucu hatası")
+              }
+          }.resume()
+      }
+    static func confirmVerificationCode(email: String, code: String, completion: @escaping (Bool, String) -> Void) {
+        guard let url = URL(string: "\(Endpoints.baseURL)/confirm_firma_kod") else {
+            completion(false, "Geçersiz URL")
+            return
+        }
+
+        var request = URLRequest(url: url)
+        request.httpMethod = "POST"
+        request.setValue(Endpoints.apikey, forHTTPHeaderField: "X-API-KEY")
+        request.setValue("application/x-www-form-urlencoded", forHTTPHeaderField: "Content-Type")
+
+        let postString = "email=\(email)&kod=\(code)"
+        request.httpBody = postString.data(using: .utf8)
+
+        URLSession.shared.dataTask(with: request) { data, response, error in
+            if let data = data {
+                if let result = try? JSONDecoder().decode(GenericResponse.self, from: data) {
+                    completion(result.status, result.message)
+                } else {
+                    completion(false, "Yanıt çözülemedi")
+                }
+            } else {
+                completion(false, error?.localizedDescription ?? "Sunucu hatası")
+            }
+        }.resume()
+    }
+}
+
+
+struct GenericResponse: Codable {
+    let status: Bool
+    let message: String
+}

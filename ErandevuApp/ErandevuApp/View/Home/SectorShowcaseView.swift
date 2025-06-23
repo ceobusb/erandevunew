@@ -1,17 +1,11 @@
 import SwiftUI
 
 struct SectorShowcaseView: View {
-    
-    
-    let sectors: [Sector] = [
-        Sector(title: "Kuaför & Güzellik", icon: "scissors", colorName: "blue", description: "Kuaför, güzellik salonu, cilt bakımı merkezleri için hızlı randevu yönetimi."),
-        Sector(title: "Oto Servis", icon: "car.fill", colorName: "green", description: "Servis rezervasyonları, bakım takibi ve müşteri yönetimi."),
-        Sector(title: "Danışmanlık", icon: "checkmark.circle.fill", colorName: "purple", description: "Psikolojik, hukuki, bireysel danışmanlık hizmetleri için uygundur."),
-        Sector(title: "Eğitim", icon: "book.fill", colorName: "red", description: "Özel dersler, dil kursları, okul randevuları için uygundur."),
-        Sector(title: "Klinik & Sağlık", icon: "cross.case.fill", colorName: "teal", description: "Poliklinikler, aile hekimlikleri, fizyoterapi merkezleri için özel modüller içerir."),
-        Sector(title: "Etkinlik Planlama", icon: "calendar.badge.clock", colorName: "indigo", description: "Etkinlik organizasyon firmaları ve rezervasyonlar için mükemmel.")
-    ]
-    
+    @State private var sectors: [Sector] = []
+
+    // 2 kolonlu grid yapısı
+    let columns = [GridItem(.flexible()), GridItem(.flexible())]
+
     var body: some View {
         VStack(alignment: .leading) {
             Text("Sektörler")
@@ -19,7 +13,7 @@ struct SectorShowcaseView: View {
                 .bold()
                 .padding(.horizontal)
 
-            LazyVGrid(columns: [GridItem(.flexible()), GridItem(.flexible())], spacing: 16) {
+            LazyVGrid(columns: columns, spacing: 16) {
                 ForEach(sectors) { sector in
                     NavigationLink(destination: SectorDetailView(sector: sector)) {
                         VStack(spacing: 8) {
@@ -32,15 +26,23 @@ struct SectorShowcaseView: View {
                                 .multilineTextAlignment(.center)
                                 .foregroundColor(.white)
                         }
-                        .frame(height: 80)
+                        .frame(height: 100)
                         .frame(maxWidth: .infinity)
-                        .background(sector.color)
+                        .background(Color(hexOrName: sector.color_name))
                         .cornerRadius(12)
-                        .padding(.horizontal, 8)
+                        .shadow(radius: 2)
+                        .padding(.horizontal, 4)
                     }
                 }
             }
-            .padding(.vertical)
+            .padding()
+        }
+        .onAppear {
+            SectorService.fetchSectors { result in
+                DispatchQueue.main.async {
+                    self.sectors = result
+                }
+            }
         }
     }
 }

@@ -29,9 +29,22 @@
 		5F5E508E2E07173300EACE41 /* ErandevuAppUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ErandevuAppUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		28C6260B2E097595007D1AC8 /* Exceptions for "ErandevuApp" folder in "ErandevuApp" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = 5F5E50752E07173200EACE41 /* ErandevuApp */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
+
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		5F5E50782E07173200EACE41 /* ErandevuApp */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				28C6260B2E097595007D1AC8 /* Exceptions for "ErandevuApp" folder in "ErandevuApp" target */,
+			);
 			path = ErandevuApp;
 			sourceTree = "<group>";
 		};
@@ -394,7 +407,10 @@
 				DEVELOPMENT_TEAM = DYF3GNN865;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = ErandevuApp/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = "E-Randevu";
+				INFOPLIST_KEY_LSApplicationCategoryType = "";
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "Konumunuzu almak için izin gerekiyor";
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphoneos*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphonesimulator*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents[sdk=iphoneos*]" = YES;
@@ -433,7 +449,10 @@
 				DEVELOPMENT_TEAM = DYF3GNN865;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = ErandevuApp/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = "E-Randevu";
+				INFOPLIST_KEY_LSApplicationCategoryType = "";
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "Konumunuzu almak için izin gerekiyor";
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphoneos*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphonesimulator*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents[sdk=iphoneos*]" = YES;

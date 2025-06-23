@@ -1,21 +1,13 @@
-import SwiftUI // ← Bunu ekle
-import Foundation
-struct Sector: Identifiable {
-    let id = UUID()
-    let title: String
-    let icon: String
-    let colorName: String // ← string olarak tanımlıyoruz
-    let description: String
+import SwiftUI
 
-    var color: Color {
-        switch colorName {
-        case "blue": return .blue
-        case "green": return .green
-        case "red": return .red
-        case "purple": return .purple
-        case "teal": return .teal
-        case "indigo": return .indigo
-        default: return .gray
-        }
-    }
+import Foundation
+
+struct Sector: Identifiable, Codable, Hashable {
+    let id: String
+    let title: String
+    let description: String
+    let icon: String
+    let color_name: String
 }
+
+

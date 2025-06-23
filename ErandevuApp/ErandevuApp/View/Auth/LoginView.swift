@@ -1,6 +1,7 @@
 import SwiftUI
 
 struct LoginView: View {
+    @StateObject private var viewModel = LoginViewModel()
     enum LoginType: String, CaseIterable {
         case firma = "Firma Girişi"
         case musteri = "Müşteri Girişi"
@@ -12,99 +13,101 @@ struct LoginView: View {
     @State private var isLoading = false
     @State private var showError = false
     @State private var errorMessage = ""
+    @AppStorage("isLoggedIn") var isLoggedIn: Bool = false
+
 
     var body: some View {
         VStack(spacing: 20) {
-            Spacer()
-
-            // Giriş Tipi Seçimi
-            Picker("Giriş Tipi", selection: $selectedLoginType) {
-                ForEach(LoginType.allCases, id: \.self) { type in
-                    Text(type.rawValue).tag(type)
-                }
-            }
-            .pickerStyle(SegmentedPickerStyle())
-            .padding(.horizontal)
-
-            Text("\(selectedLoginType.rawValue)")
-                .font(.largeTitle)
-                .fontWeight(.bold)
-
-            Text(selectedLoginType == .firma ?
-                 "Lütfen firmanıza ait kullanıcı bilgilerinizle giriş yapın." :
-                 "Lütfen müşteri bilgilerinizle giriş yapın.")
-                .font(.body)
-                .multilineTextAlignment(.center)
-                .padding(.horizontal)
-
-            TextField("E-posta", text: $email)
-                .keyboardType(.emailAddress)
-                .textInputAutocapitalization(.none)
-                .padding()
-                .background(Color(.secondarySystemBackground))
-                .cornerRadius(10)
-
-            SecureField("Şifre", text: $password)
-                .padding()
-                .background(Color(.secondarySystemBackground))
-                .cornerRadius(10)
-
-            if showError {
-                Text(errorMessage)
-                    .foregroundColor(.red)
-                    .font(.footnote)
-            }
-
-            Button(action: {
-                login()
-            }) {
-                if isLoading {
-                    ProgressView()
-                        .frame(maxWidth: .infinity)
-                        .padding()
+            
+        NavigationStack {
+                if isLoggedIn {
+                    MyCompanyProfileView()
                 } else {
-                    Text("Giriş Yap")
-                        .frame(maxWidth: .infinity)
+                    Spacer()
+
+                    // Giriş Tipi Seçimi
+                    Picker("Giriş Tipi", selection: $selectedLoginType) {
+                        ForEach(LoginType.allCases, id: \.self) { type in
+                            Text(type.rawValue).tag(type)
+                        }
+                    }
+                    .pickerStyle(SegmentedPickerStyle())
+                    .padding(.horizontal)
+
+                    Text("\(selectedLoginType.rawValue)")
+                        .font(.largeTitle)
+                        .fontWeight(.bold)
+
+                    Text(
+                        selectedLoginType == .firma
+                            ? "Lütfen firmanıza ait kullanıcı bilgilerinizle giriş yapın."
+                            : "Lütfen müşteri bilgilerinizle giriş yapın."
+                    )
+                    .font(.body)
+                    .multilineTextAlignment(.center)
+                    .padding(.horizontal)
+
+                    TextField("E-posta", text: $viewModel.email)
+                        .keyboardType(.emailAddress)
+                        .textInputAutocapitalization(.none)
                         .padding()
-                        .background(Color.blue)
-                        .foregroundColor(.white)
+                        .background(Color(.secondarySystemBackground))
                         .cornerRadius(10)
+
+                    SecureField("Şifre", text: $viewModel.password)
+                        .padding()
+                        .background(Color(.secondarySystemBackground))
+                        .cornerRadius(10)
+
+                    if showError {
+                        Text(errorMessage)
+                            .foregroundColor(.red)
+                            .font(.footnote)
+                    }
+
+                    Button(action: {
+                        viewModel.login()
+                    }) {
+                        if viewModel.isLoading {
+                            ProgressView()
+                        } else {
+                            Text("Giriş Yap")
+                                .frame(maxWidth: .infinity)
+                                .padding()
+                                .background(Color.blue)
+                                .foregroundColor(.white)
+                                .cornerRadius(10)
+                        }
+                    }
+
+                    Spacer()
+
+                    NavigationLink(destination: RegisterView()) {
+                        Text("Hesabınız yok mu? Kayıt olun")
+                            .font(.footnote)
+                            .foregroundColor(.blue)
+                    }
+
+                    Spacer()
                 }
             }
-
-            Spacer()
-
-            NavigationLink(destination: RegisterView()) {
-                Text("Hesabınız yok mu? Kayıt olun")
-                    .font(.footnote)
-                    .foregroundColor(.blue)
-            }
-
-            Spacer()
+            
+         
         }
+        .navigationDestination(isPresented: $viewModel.navigateToDashboard) {
+            MyCompanyProfileView(firmaID: viewModel.firmaID, firmaName: viewModel.firmaName)
+        }
+
         .padding()
         .navigationTitle(selectedLoginType.rawValue)
         .navigationBarTitleDisplayMode(.inline)
-    }
-
-    func login() {
-        isLoading = true
-        showError = false
-
-        DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
-            isLoading = false
-            if email.lowercased() == "busra@makro2000.com.tr" && password == "123456" {
-                // başarılı giriş — yönlendirme yapılabilir
-            } else {
-                showError = true
-                errorMessage = "Geçersiz e-posta veya şifre."
-            }
+        if !viewModel.errorMessage.isEmpty {
+            Text(viewModel.errorMessage)
+                .foregroundColor(.red)
+                .font(.footnote)
         }
-    }
-}
 
-#Preview {
-    NavigationStack {
-        LoginView()
+     
     }
+
 }

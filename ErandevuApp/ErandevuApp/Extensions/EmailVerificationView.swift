@@ -7,7 +7,10 @@ struct EmailVerificationView: View {
     @State private var showAlert = false
     @State private var alertMessage = ""
     @State private var isVerifying = false
-    @Environment(\.presentationMode) var presentationMode
+    @State private var isCodeResending = false
+    @AppStorage("isLoggedIn") var isLoggedIn: Bool = false
+    @AppStorage("userEmail") var userEmail: String = ""
+    @State private var navigateToProfile = false
 
     var body: some View {
         VStack(spacing: 24) {
@@ -42,23 +45,57 @@ struct EmailVerificationView: View {
             }
             .disabled(isVerifying)
 
+            Button(action: resendCode) {
+                if isCodeResending {
+                    ProgressView()
+                        .progressViewStyle(CircularProgressViewStyle())
+                } else {
+                    Text("Kodu Tekrar Gönder")
+                        .foregroundColor(.blue)
+                }
+            }
+            .padding(.top, 8)
+
             Spacer()
         }
         .padding()
         .alert(isPresented: $showAlert) {
-            Alert(title: Text("Bilgi"), message: Text(alertMessage), dismissButton: .default(Text("Tamam")) {
-                if alertMessage == "Doğrulama başarılı" {
-                    presentationMode.wrappedValue.dismiss()
-                }
-            })
+            Alert(title: Text("Bilgi"), message: Text(alertMessage), dismissButton: .default(Text("Tamam")))
         }
+        .navigationDestination(isPresented: $navigateToProfile) {
+                      LoginView()
+              }
     }
 
     func verifyCode() {
+        guard code.count == 4 else {
+            alertMessage = "Lütfen 4 haneli bir kod girin."
+            showAlert = true
+            return
+        }
+
         isVerifying = true
         EmailAPI.confirmVerificationCode(email: email, code: code) { success, message in
             DispatchQueue.main.async {
                 isVerifying = false
+                if success {
+                    alertMessage = "Doğrulama başarılı"
+                    userEmail = email
+                    isLoggedIn = true
+                    navigateToProfile = true
+                } else {
+                    alertMessage = message
+                    showAlert = true
+                }
+            }
+        }
+    }
+
+    func resendCode() {
+        isCodeResending = true
+        EmailAPI.sendVerificationCodeNew(email: email) { success, message in
+            DispatchQueue.main.async {
+                isCodeResending = false
                 alertMessage = message
                 showAlert = true
             }

@@ -2,6 +2,9 @@ import SwiftUI
 
 struct HeaderView: View {
     @Binding var showMenu: Bool
+    @AppStorage("isLoggedIn") var isLoggedIn: Bool = false
+    @State private var isLoggingOut = false
+
 
     var body: some View {
         HStack {
@@ -33,28 +36,59 @@ struct HeaderView: View {
 
             Spacer()
 
-            // Giriş/Kayıt ikonları
-            HStack(spacing: 20) {
-                NavigationLink(destination: LoginView()) {
-                    Image(systemName: "person.fill")
-                        .font(.system(size: 18))
-                        .foregroundColor(.black)
+            // Sağ üst ikonlar
+            if isLoggedIn {
+                // Kullanıcı giriş yaptıysa
+                HStack(spacing: 20) {
+                    NavigationLink(destination: MyCompanyProfileView()) {
+                        Image(systemName: "person.crop.circle")
+                            .font(.system(size: 18))
+                            .foregroundColor(.black)
+                    }
+
+                    if isLoggingOut {
+                        ProgressView()
+                            .progressViewStyle(CircularProgressViewStyle())
+                            .frame(width: 20, height: 20)
+                            .foregroundColor(.black)
+                    } else {
+                        Button(action: {
+                            withAnimation {
+                                isLoggingOut = true
+                            }
+
+                            DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
+                                isLoggedIn = false
+                                isLoggingOut = false
+                            }
+                        }) {
+                            Image(systemName: "rectangle.portrait.and.arrow.right.fill")
+                                .font(.system(size: 20))
+                                .foregroundColor(.black)
+                        }
+                    }
                 }
 
-                NavigationLink(destination: RegisterView()) {
-                    Image(systemName: "person.badge.plus")
-                        .font(.system(size: 18))
-                        .foregroundColor(.black)
+            } else {
+                // Giriş yapmadıysa
+                HStack(spacing: 20) {
+                    NavigationLink(destination: LoginView()) {
+                        Image(systemName: "person.fill")
+                            .font(.system(size: 18))
+                            .foregroundColor(.black)
+                    }
+
+                    NavigationLink(destination: RegisterView()) {
+                        Image(systemName: "person.badge.plus")
+                            .font(.system(size: 18))
+                            .foregroundColor(.black)
+                    }
                 }
+                .frame(width: 60, alignment: .trailing)
             }
-            .frame(width: 60, alignment: .trailing)
         }
         .padding(.horizontal)
         .padding(.vertical, 20)
         .background(Color(UIColor.systemGroupedBackground))
-
-
-
-  
     }
 }

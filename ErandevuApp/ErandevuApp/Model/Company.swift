@@ -29,5 +29,12 @@ struct Sponsor: Identifiable {
     let address: String
 }
 
+struct CompanyModel: Codable {
+    let firma_id: String
+    let company_name: String
+    let email: String
+}
+
+
 
 

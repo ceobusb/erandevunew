@@ -61,8 +61,8 @@ struct SponsorDetailView: View {
                 Marker(
                     sponsor.name,
                     coordinate: CLLocationCoordinate2D(
-                        latitude: sponsor.latitude ?? 0,
-                        longitude: sponsor.longitude ?? 0
+                        latitude: sponsor.latitude,
+                        longitude: sponsor.longitude
                     )
                 )
             }

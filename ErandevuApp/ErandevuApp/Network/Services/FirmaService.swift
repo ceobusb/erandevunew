@@ -103,9 +103,61 @@ class FirmaService {
                 }
             }.resume()
         }
+    
+    static func login(email: String, password: String, completion: @escaping (Result<CompanyModel, Error>) -> Void) {
+        guard let url = URL(string: Endpoints.Firma.login) else {
+            let error = NSError(domain: "", code: -1, userInfo: [NSLocalizedDescriptionKey: "URL Geçersiz"])
+            completion(.failure(error))
+            return
+        }
+
+        var request = URLRequest(url: url)
+        request.httpMethod = "POST"
+        request.setValue("application/x-www-form-urlencoded", forHTTPHeaderField: "Content-Type")
+        request.setValue(Endpoints.apikey, forHTTPHeaderField: "X-API-KEY")
+
+        let postString = "email=\(email)&password=\(password)"
+        request.httpBody = postString.data(using: .utf8)
+
+        URLSession.shared.dataTask(with: request) { data, _, error in
+            if let error = error {
+                completion(.failure(error))
+                return
+            }
+
+            guard let data = data else {
+                let error = NSError(domain: "", code: -1, userInfo: [NSLocalizedDescriptionKey: "Sunucudan veri alınamadı"])
+                completion(.failure(error))
+                return
+            }
+
+            do {
+                let decoded = try JSONDecoder().decode(APIResponse<CompanyModel>.self, from: data)
+
+                if decoded.status, let data = decoded.data {
+                    completion(.success(data))
+                } else {
+                    let apiError = NSError(domain: "", code: -1, userInfo: [NSLocalizedDescriptionKey: decoded.message])
+                    completion(.failure(apiError))
+                }
+
+
+            } catch {
+                completion(.failure(error))
+            }
+
+        }.resume()
+    }
+
+
 }
 
 
+struct APIResponse<T: Codable>: Codable {
+    let status: Bool
+    let message: String
+    let data: T?
+}
 
 
 struct FeaturedCompanyResponse: Codable {

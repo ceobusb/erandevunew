@@ -17,8 +17,7 @@ struct Company: Identifiable {
         String(name.prefix(1))
     }
 }
-
-struct Sponsor: Identifiable {
+struct Sponsor: Identifiable, Hashable {
     let id: UUID
     let name: String
     let logoUrl: String
@@ -28,6 +27,7 @@ struct Sponsor: Identifiable {
     let rating: Double
     let address: String
 }
+
 
 struct CompanyModel: Codable {
     let firma_id: String

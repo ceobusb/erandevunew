@@ -1,16 +1,18 @@
 import MapKit
 import SwiftUI
+import SDWebImageSwiftUI
+
 
 struct SponsorDetailView: View {
     let sponsor: Sponsor
-
+    
     @State private var cameraPosition: MapCameraPosition
-
+    
     init(sponsor: Sponsor) {
         self.sponsor = sponsor
-        let latitude = sponsor.latitude ?? 0
-        let longitude = sponsor.longitude ?? 0
-
+        let latitude = sponsor.latitude
+        let longitude = sponsor.longitude
+        
         _cameraPosition = State(
             initialValue: .region(
                 MKCoordinateRegion(
@@ -26,32 +28,35 @@ struct SponsorDetailView: View {
             )
         )
     }
-
+    
     var body: some View {
         VStack(spacing: 16) {
-            AsyncImage(url: URL(string: sponsor.logoUrl)) { image in
-                image
-                    .resizable()
-                    .scaledToFit()
-                    .frame(width: 80, height: 80)
-            } placeholder: {
-                ProgressView()
-                    .frame(width: 80, height: 80)
-            }
-
+            
+            
+            WebImage(url: URL(string: sponsor.logoUrl))
+                .onSuccess { image, data, cacheType in
+                    // Başarılı yükleme
+                }
+                .resizable()
+            
+                .indicator(.progress) // .activity değil, .progress kullanılmalı
+                .scaledToFit()
+                .frame(width: 80, height: 80)
+                .clipShape(Circle())
+            
             Text(sponsor.name)
                 .font(.title)
                 .bold()
-
+            
             StarRatingView(rating: sponsor.rating)
-
+            
             Text(String(format: "%.1f", sponsor.rating))
                 .font(.subheadline)
                 .foregroundColor(.gray)
-
+            
             Text(sponsor.description)
                 .padding()
-
+            
             HStack {
                 Image(systemName: "mappin.circle")
                 Text(sponsor.address)
@@ -69,9 +74,9 @@ struct SponsorDetailView: View {
             .frame(height: 200)
             .cornerRadius(10)
             .padding(.vertical)
-
+            
             Spacer()
-
+            
             Button(action: {
                 // Randevu alma aksiyonu
             }) {
@@ -84,7 +89,7 @@ struct SponsorDetailView: View {
                     .cornerRadius(12)
             }
             .padding(.top, 20)
-
+            
             Spacer()
         }
         .padding()

@@ -29,7 +29,7 @@ class FirmaService {
         request.httpMethod = "POST"
         let boundary = UUID().uuidString
         request.setValue("multipart/form-data; boundary=\(boundary)", forHTTPHeaderField: "Content-Type")
-        request.setValue(Endpoints.apikey, forHTTPHeaderField: "X-API-KEY")
+        request.setValue(Endpoints.apikey, forHTTPHeaderField: "X-Api-Key")
 
         var data = Data()
 
@@ -82,7 +82,7 @@ class FirmaService {
             var request = URLRequest(url: url)
             request.httpMethod = "GET"
             request.setValue("application/json", forHTTPHeaderField: "Accept")
-            request.setValue(Endpoints.apikey, forHTTPHeaderField: "X-API-KEY")
+            request.setValue(Endpoints.apikey, forHTTPHeaderField: "X-Api-Key")
 
             URLSession.shared.dataTask(with: request) { data, response, error in
                 if let error = error {
@@ -114,7 +114,7 @@ class FirmaService {
         var request = URLRequest(url: url)
         request.httpMethod = "POST"
         request.setValue("application/x-www-form-urlencoded", forHTTPHeaderField: "Content-Type")
-        request.setValue(Endpoints.apikey, forHTTPHeaderField: "X-API-KEY")
+        request.setValue(Endpoints.apikey, forHTTPHeaderField: "X-Api-Key")
 
         let postString = "email=\(email)&password=\(password)"
         request.httpBody = postString.data(using: .utf8)

@@ -1,5 +1,7 @@
 import SwiftUI
 struct MyCompanyProfileView: View {
+    @AppStorage("isLoggedIn") var isLoggedIn: Bool = false
+
     @AppStorage("firmaID") var firmaID: String = ""
     @AppStorage("firmaName") var firmaName: String = ""
 

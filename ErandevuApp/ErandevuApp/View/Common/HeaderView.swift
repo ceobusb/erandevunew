@@ -4,6 +4,8 @@ struct HeaderView: View {
     @Binding var showMenu: Bool
     @AppStorage("isLoggedIn") var isLoggedIn: Bool = false
     @State private var isLoggingOut = false
+    @StateObject private var appState = AppState()
+
 
 
     var body: some View {
@@ -40,7 +42,7 @@ struct HeaderView: View {
             if isLoggedIn {
                 // Kullanıcı giriş yaptıysa
                 HStack(spacing: 20) {
-                    NavigationLink(destination: MyCompanyProfileView()) {
+                    NavigationLink(destination:   MyCompanyProfileView()) {
                         Image(systemName: "person.crop.circle")
                             .font(.system(size: 18))
                             .foregroundColor(.black)
@@ -55,6 +57,10 @@ struct HeaderView: View {
                         Button(action: {
                             withAnimation {
                                 isLoggingOut = true
+                                appState.isLoggedIn = false
+                                appState.isEmailVerified = false
+                                appState.userEmail = nil
+                               
                             }
 
                             DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {

@@ -1,6 +1,8 @@
 import SwiftUI
 
 struct SideMenuView: View {
+    @State private var selectedSponsor: Sponsor? = nil
+
     var body: some View {
         VStack(alignment: .leading, spacing: 20) {
             Text("Menü")

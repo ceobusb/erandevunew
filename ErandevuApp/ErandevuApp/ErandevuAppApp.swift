@@ -1,17 +1,14 @@
-//
-//  ErandevuAppApp.swift
-//  ErandevuApp
-//
-//  Created by BÜŞRA ŞENER BOLAT on 21.06.2025.
-//
-
 import SwiftUI
 
 @main
 struct ErandevuAppApp: App {
+    @StateObject private var appState = AppState()
+
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            RootView()
+                .environmentObject(appState)  // BURADA MUTLAKA EKLE
         }
     }
 }
+

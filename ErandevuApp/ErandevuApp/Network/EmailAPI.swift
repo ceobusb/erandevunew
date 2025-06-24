@@ -12,7 +12,7 @@ class EmailAPI {
         var request = URLRequest(url: url)
         request.httpMethod = "POST"
         request.setValue("application/x-www-form-urlencoded", forHTTPHeaderField: "Content-Type")
-        request.setValue(Endpoints.apikey, forHTTPHeaderField: "X-API-KEY")
+        request.setValue(Endpoints.apikey, forHTTPHeaderField: "X-Api-Key")
 
 
         let bodyString = "email=\(email)"
@@ -38,7 +38,7 @@ class EmailAPI {
         var request = URLRequest(url: url)
         request.httpMethod = "POST"
         request.setValue("application/x-www-form-urlencoded", forHTTPHeaderField: "Content-Type")
-        request.setValue(Endpoints.apikey, forHTTPHeaderField: "X-API-KEY")
+        request.setValue(Endpoints.apikey, forHTTPHeaderField: "X-Api-Key")
 
         let bodyString = "email=\(email)&kod=\(kod)"
         request.httpBody = bodyString.data(using: .utf8)
@@ -62,7 +62,7 @@ class EmailAPI {
 
           var request = URLRequest(url: url)
           request.httpMethod = "POST"
-          request.setValue(Endpoints.apikey, forHTTPHeaderField: "X-API-KEY")
+          request.setValue(Endpoints.apikey, forHTTPHeaderField: "X-Api-Key")
           request.setValue("application/x-www-form-urlencoded", forHTTPHeaderField: "Content-Type")
 
           let postString = "email=\(email)"
@@ -89,7 +89,7 @@ class EmailAPI {
 
         var request = URLRequest(url: url)
         request.httpMethod = "POST"
-        request.setValue(Endpoints.apikey, forHTTPHeaderField: "X-API-KEY")
+        request.setValue(Endpoints.apikey, forHTTPHeaderField: "X-Api-Key")
         request.setValue("application/x-www-form-urlencoded", forHTTPHeaderField: "Content-Type")
 
         let postString = "email=\(email)&kod=\(code)"
@@ -117,7 +117,7 @@ class EmailAPI {
 
           var request = URLRequest(url: url)
           request.httpMethod = "POST"
-          request.setValue(Endpoints.apikey, forHTTPHeaderField: "X-API-KEY")
+          request.setValue(Endpoints.apikey, forHTTPHeaderField: "X-Api-Key")
           request.setValue("application/x-www-form-urlencoded", forHTTPHeaderField: "Content-Type")
 
           let postString = "email=\(email)"

@@ -1,7 +1,7 @@
 import SwiftUI
 
 struct LoginView: View {
-    @StateObject private var viewModel = LoginViewModel()
+    
     enum LoginType: String, CaseIterable {
         case firma = "Firma Girişi"
         case musteri = "Müşteri Girişi"
@@ -14,7 +14,8 @@ struct LoginView: View {
     @State private var showError = false
     @State private var errorMessage = ""
     @AppStorage("isLoggedIn") var isLoggedIn: Bool = false
-
+    @EnvironmentObject var appState: AppState
+    @StateObject private var viewModel = LoginViewModel()
 
     var body: some View {
         VStack(spacing: 20) {
@@ -22,7 +23,9 @@ struct LoginView: View {
         NavigationStack {
                 if isLoggedIn {
                     MyCompanyProfileView()
+
                 } else {
+              
                     Spacer()
 
                     // Giriş Tipi Seçimi
@@ -95,7 +98,8 @@ struct LoginView: View {
          
         }
         .navigationDestination(isPresented: $viewModel.navigateToDashboard) {
-            MyCompanyProfileView(firmaID: viewModel.firmaID, firmaName: viewModel.firmaName)
+            MyCompanyProfileView()
+
         }
 
         .padding()

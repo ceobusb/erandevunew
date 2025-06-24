@@ -8,7 +8,7 @@ class SectorService {
         
         var request = URLRequest(url: url)
         request.httpMethod = "GET"
-        request.setValue(Endpoints.apikey, forHTTPHeaderField: "X-API-KEY") // ← önemli
+        request.setValue(Endpoints.apikey, forHTTPHeaderField: "X-Api-Key") // ← önemli
 
         URLSession.shared.dataTask(with: request) { data, response, error in
 

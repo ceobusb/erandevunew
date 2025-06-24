@@ -10,11 +10,12 @@ class LoginViewModel: ObservableObject {
     @AppStorage("firmaID") var firmaID: String = "0"
     @AppStorage("firmaName") var firmaName: String = ""
     @AppStorage("isLoggedIn") var isLoggedIn: Bool = false
-    
+
 
 
 
     func login() {
+       
         guard !email.isEmpty, !password.isEmpty else {
             errorMessage = "Tüm alanları doldurun"
             return
@@ -22,7 +23,7 @@ class LoginViewModel: ObservableObject {
         
         
 
-        isLoading = true
+      
 
         FirmaService.login(email: email, password: password) { result in
             DispatchQueue.main.async {

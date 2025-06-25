@@ -2,188 +2,161 @@ import SwiftUI
 import CoreLocation
 
 struct RegisterView: View {
-    @State private var companyName = "Busra"
+    @EnvironmentObject var appState: AppState
+    
+    @State private var companyName = "busra"
     @State private var selectedSector: Sector?
     @State private var sectors: [Sector] = []
-    @State private var companyInfo = "test"
+    @State private var companyInfo = "busra"
     
     @State private var showImagePicker = false
     @State private var logoImage: UIImage?
     
-    
-    @State private var address = "test"
+    @State private var address = "busra"
     @StateObject private var locationManager = LocationManager()
     
-    @State private var fullName = "test"
-    @State private var email = "suarehali@gmail.com"
-    @State private var password = "111111"
-    @State private var confirmPassword = "111111"
+    @State private var fullName = "busra"
+    @State private var email = "Suarehali@gmail.com"
+    @State private var password = "11"
+    @State private var confirmPassword = "11"
     
     @State private var showAlert = false
     @State private var alertMessage = ""
     
-    @State private var navigateToVerification = false
-    @State private var registeredEmail = ""
     @State private var isLoading = false
-    @AppStorage("isLoggedIn") var isLoggedIn: Bool = false
+    @State private var showSectorDialog = false
     
     
     var body: some View {
-        if isLoggedIn {
-            ContentView()
-        }
-        else {
-            
-            
-            Group {
-                if isLoading {
-                    ProgressView("Kayıt yapılıyor...")
-                        .padding()
-                }
-                else {
-                    
-                    ScrollView {
+        Group {
+            if isLoading {
+                ProgressView("Kayıt yapılıyor...")
+                    .padding()
+            } else {
+                ScrollView {
+                    VStack(spacing: 16) {
+                        Text("Firma Kaydı")
+                            .font(.title)
+                            .bold()
                         
-                        VStack(spacing: 16) {
-                            Text("Firma Kaydı")
-                                .font(.title)
-                                .bold()
-                            
-                            // Firma Adı
-                            TextField("Firma Adı", text: $companyName)
-                                .padding()
-                                .background(Color(.secondarySystemBackground))
-                                .cornerRadius(10)
-                            
-                            // Sektör Seçimi
-                            Button(action: { showSectorDialog = true }) {
-                                HStack {
-                                    Text(selectedSector?.title ?? "Sektör Seçin")
-                                        .foregroundColor(selectedSector == nil ? .gray : .primary)
-                                    Spacer()
-                                    Image(systemName: "chevron.down")
-                                }
-                                .padding()
-                                .background(Color(.secondarySystemBackground))
-                                .cornerRadius(10)
-                            }
-                            .confirmationDialog("Sektör Seçin", isPresented: $showSectorDialog) {
-                                ForEach(sectors, id: \.id) { sector in
-                                    Button(sector.title) {
-                                        selectedSector = sector
-                                    }
-                                }
-                            }
-                            
-                            // Açıklama
-                            TextEditor(text: $companyInfo)
-                                .frame(height: 100)
-                                .padding()
-                                .overlay(RoundedRectangle(cornerRadius: 10).stroke(Color.gray.opacity(0.3)))
-                            
-                            // Logo
-                            if let image = logoImage {
-                                Image(uiImage: image)
-                                    .resizable()
-                                    .scaledToFit()
-                                    .frame(height: 150)
-                                    .cornerRadius(10)
-                            }
-                            
-                            
-                            Button(action: {
-                                showImagePicker = true
-                            }) {
-                                Text("Logo Seç (500x500 JPG)")
-                                    .foregroundColor(.blue)
-                                    .padding()
-                                    .frame(maxWidth: .infinity)
-                                    .background(Color(.systemGray6))
-                                    .cornerRadius(8)
-                            }
-                            .sheet(isPresented: $showImagePicker) {
-                                ImagePicker(image: $logoImage)
+                        TextField("Firma Adı", text: $companyName)
+                            .padding()
+                            .background(Color(.secondarySystemBackground))
+                            .cornerRadius(10)
+                        
+                        // Sektör seçimi
+                        Button(action: { showSectorDialog = true }) {
+                            HStack {
+                                Text(selectedSector?.title ?? "Sektör Seçin")
+                                    .foregroundColor(selectedSector == nil ? .gray : .primary)
+                                Spacer()
+                                Image(systemName: "chevron.down")
                             }
                             .padding()
-                            .background(Color.gray.opacity(0.1))
+                            .background(Color(.secondarySystemBackground))
                             .cornerRadius(10)
-                            
-                            // Adres
-                            TextField("Açık Adres", text: $address)
-                                .padding()
-                                .background(Color(.secondarySystemBackground))
-                                .cornerRadius(10)
-                            
-                            // Konum Bilgisi
-                            if let location = locationManager.location {
-                                Text("Konum: \(location.latitude), \(location.longitude)")
-                                    .font(.caption)
-                                    .foregroundColor(.gray)
-                            } else {
-                                Text("Konum alınamadı")
-                                    .font(.caption)
-                                    .foregroundColor(.red)
+                        }
+                        .confirmationDialog("Sektör Seçin", isPresented: $showSectorDialog) {
+                            ForEach(sectors, id: \.id) { sector in
+                                Button(sector.title) {
+                                    selectedSector = sector
+                                }
                             }
-                            
-                            // Kullanıcı Bilgileri
-                            TextField("Ad Soyad", text: $fullName)
-                                .padding()
-                                .background(Color(.secondarySystemBackground))
-                                .cornerRadius(10)
-                            
-                            TextField("E-posta", text: $email)
-                                .keyboardType(.emailAddress)
-                                .padding()
-                                .background(Color(.secondarySystemBackground))
-                                .cornerRadius(10)
-                            
-                            SecureField("Şifre", text: $password)
-                                .textContentType(nil)          // Otomatik parola önerisini kapatır
-                                .disableAutocorrection(true)   // Otomatik düzeltmeyi kapatır
-                                .padding()
-                                .background(Color(.secondarySystemBackground))
-                                .cornerRadius(10)
-                            
-                            SecureField("Şifre Tekrar", text: $confirmPassword)
-                                .textContentType(nil)
-                                .disableAutocorrection(true)
-                                .padding()
-                                .background(Color(.secondarySystemBackground))
-                                .cornerRadius(10)
-                            
-                            Button("Kayıt Ol") {
-                                validateAndRegister()
-                            }
-                            .padding()
-                            .background(Color.blue)
-                            .foregroundColor(.white)
-                            .cornerRadius(10)
-                            .navigationDestination(isPresented: $navigateToVerification) {
-                                          EmailVerificationView(email: registeredEmail)
-                                      }
                         }
                         
+                        // Açıklama
+                        TextEditor(text: $companyInfo)
+                            .frame(height: 100)
+                            .padding()
+                            .overlay(RoundedRectangle(cornerRadius: 10).stroke(Color.gray.opacity(0.3)))
+                        
+                        // Logo
+                        if let image = logoImage {
+                            Image(uiImage: image)
+                                .resizable()
+                                .scaledToFit()
+                                .frame(height: 150)
+                                .cornerRadius(10)
+                        }
+                        
+                        Button("Logo Seç (500x500 JPG)") {
+                            showImagePicker = true
+                        }
+                        .sheet(isPresented: $showImagePicker) {
+                            ImagePicker(image: $logoImage)
+                        }
+                        .frame(maxWidth: .infinity)
+                        .padding()
+                        .background(Color(.systemGray6))
+                        .cornerRadius(8)
+                        
+                        TextField("Açık Adres", text: $address)
+                            .padding()
+                            .background(Color(.secondarySystemBackground))
+                            .cornerRadius(10)
+                        
+                        if let location = locationManager.location {
+                            Text("Konum: \(location.latitude), \(location.longitude)")
+                                .font(.caption)
+                                .foregroundColor(.gray)
+                        } else {
+                            Text("Konum alınamadı")
+                                .font(.caption)
+                                .foregroundColor(.red)
+                        }
+                        
+                        TextField("Ad Soyad", text: $fullName)
+                            .padding()
+                            .background(Color(.secondarySystemBackground))
+                            .cornerRadius(10)
+                        
+                        TextField("E-posta", text: $email)
+                            .keyboardType(.emailAddress)
+                            .padding()
+                            .background(Color(.secondarySystemBackground))
+                            .cornerRadius(10)
+                        
+                        SecureField("Şifre", text: $password)
+                            .padding()
+                            .background(Color(.secondarySystemBackground))
+                            .cornerRadius(10)
+                        
+                        SecureField("Şifre Tekrar", text: $confirmPassword)
+                            .padding()
+                            .background(Color(.secondarySystemBackground))
+                            .cornerRadius(10)
+                        
+                        Button("Kayıt Ol") {
+                            validateAndRegister()
+                        }
+                        .padding()
+                        .frame(maxWidth: .infinity)
+                        .background(Color.blue)
+                        .foregroundColor(.white)
+                        .cornerRadius(10)
                     }
                     .padding()
-                    
                 }
             }
-            .onAppear {
-                SectorService.fetchSectors { self.sectors = $0 }
-            }
-            .alert("Uyarı", isPresented: $showAlert) {
-                Button("Tamam", role: .cancel) {}
-            } message: {
-                Text(alertMessage)
-            }
-            
         }
-           
-        
+        .onAppear {
+            SectorService.fetchSectors { self.sectors = $0 }
+        }
+        .alert("Uyarı", isPresented: $showAlert) {
+            Button("Tamam") {
+                if alertMessage.contains("başarı") {
+                    appState.userEmail = email
+                    appState.isLoggedIn = false
+                    appState.isEmailVerified = false
+                    appState.path.append("EmailVerification") // 👈 yönlendirme
+                }
+            }
+        } message: {
+            Text(alertMessage)
+        }
+
+
     }
-    
-    @State private var showSectorDialog = false
-    
     
     func validateAndRegister() {
         guard !companyName.isEmpty,
@@ -217,13 +190,16 @@ struct RegisterView: View {
         ) { success, message in
             DispatchQueue.main.async {
                 isLoading = false
-                alertMessage = message
-                showAlert = true
-                
                 if success {
-                    registeredEmail = email
-                    navigateToVerification = true
+                    // önce alert'ı göster
+                    alertMessage = message
+                    showAlert = true
+
+                } else {
+                    alertMessage = message
+                    showAlert = true
                 }
+
             }
         }
     }

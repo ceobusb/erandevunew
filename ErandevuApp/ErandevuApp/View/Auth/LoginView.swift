@@ -22,10 +22,9 @@ struct LoginView: View {
             
         NavigationStack {
                 if isLoggedIn {
-                    MyCompanyProfileView()
+                    AccountView()
 
                 } else {
-              
                     Spacer()
 
                     // Giriş Tipi Seçimi
@@ -69,7 +68,9 @@ struct LoginView: View {
                     }
 
                     Button(action: {
-                        viewModel.login()
+                        viewModel.login {
+                               appState.completeLogin()
+                           }
                     }) {
                         if viewModel.isLoading {
                             ProgressView()
@@ -97,10 +98,7 @@ struct LoginView: View {
             
          
         }
-        .navigationDestination(isPresented: $viewModel.navigateToDashboard) {
-            MyCompanyProfileView()
 
-        }
 
         .padding()
         .navigationTitle(selectedLoginType.rawValue)

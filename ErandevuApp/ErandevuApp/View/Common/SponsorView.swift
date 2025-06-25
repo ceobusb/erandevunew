@@ -38,7 +38,7 @@ struct SponsorView: View {
                 DispatchQueue.main.async {
                     switch result {
                     case .success(let data):
-                        print("Gelen Veri:", data)
+                      
                         self.companies = data
                     case .failure(let err):
                         print("Hata:", err.localizedDescription)

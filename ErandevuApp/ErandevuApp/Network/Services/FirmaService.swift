@@ -96,7 +96,7 @@ class FirmaService {
                 }
                 do {
                     let decoded = try JSONDecoder().decode(FeaturedCompanyResponse.self, from: data)
-                    print(decoded.data)
+         
                     completion(.success(decoded.data))
                 } catch {
                     completion(.failure(error))

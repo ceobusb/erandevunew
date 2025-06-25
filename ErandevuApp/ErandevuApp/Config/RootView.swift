@@ -5,19 +5,36 @@ struct RootView: View {
 
     var body: some View {
         NavigationStack(path: $appState.path) {
-            if !appState.isLoggedIn {
-                ContentView()
-            } else if !appState.isEmailVerified {
-                if let email = appState.userEmail {
-                    EmailVerificationView(email: email)
-                        .environmentObject(appState)
+            Group {
+                if !appState.isLoggedIn {
+                    if !appState.isEmailVerified {
+                        if let email = appState.userEmail {
+                            EmailVerificationView(email: email)
+                        } else {
+                            ContentView()
+                        }
+                    } else {
+                        LoginView()
+                    }
                 } else {
                     ContentView()
-                    
                 }
-            } else {
-                ContentView()
-                    .environmentObject(appState)
+            }
+            .navigationDestination(for: String.self) { route in
+                switch route {
+                case "Account":
+                    AccountView()
+                case "Register":
+                    RegisterView()
+                case "EmailVerification":
+                    if let email = appState.userEmail {
+                        EmailVerificationView(email: email)
+                    } else {
+                        Text("E-posta bulunamadı")
+                    }
+                default:
+                    Text("Sayfa bulunamadı")
+                }
             }
         }
 

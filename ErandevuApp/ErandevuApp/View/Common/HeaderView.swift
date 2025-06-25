@@ -2,11 +2,8 @@ import SwiftUI
 
 struct HeaderView: View {
     @Binding var showMenu: Bool
-    @AppStorage("isLoggedIn") var isLoggedIn: Bool = false
+    @EnvironmentObject var appState: AppState
     @State private var isLoggingOut = false
-    @StateObject private var appState = AppState()
-
-
 
     var body: some View {
         HStack {
@@ -39,10 +36,9 @@ struct HeaderView: View {
             Spacer()
 
             // Sağ üst ikonlar
-            if isLoggedIn {
-                // Kullanıcı giriş yaptıysa
+            if appState.isLoggedIn {
                 HStack(spacing: 20) {
-                    NavigationLink(destination:   MyCompanyProfileView()) {
+                    NavigationLink(destination: AccountView()) {
                         Image(systemName: "person.crop.circle")
                             .font(.system(size: 18))
                             .foregroundColor(.black)
@@ -57,14 +53,10 @@ struct HeaderView: View {
                         Button(action: {
                             withAnimation {
                                 isLoggingOut = true
-                                appState.isLoggedIn = false
-                                appState.isEmailVerified = false
-                                appState.userEmail = nil
-                               
                             }
 
                             DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
-                                isLoggedIn = false
+                                appState.logout()
                                 isLoggingOut = false
                             }
                         }) {
@@ -76,7 +68,6 @@ struct HeaderView: View {
                 }
 
             } else {
-                // Giriş yapmadıysa
                 HStack(spacing: 20) {
                     NavigationLink(destination: LoginView()) {
                         Image(systemName: "person.fill")

@@ -13,7 +13,6 @@ struct LoginView: View {
     @State private var isLoading = false
     @State private var showError = false
     @State private var errorMessage = ""
-    @AppStorage("isLoggedIn") var isLoggedIn: Bool = false
     @EnvironmentObject var appState: AppState
     @StateObject private var viewModel = LoginViewModel()
 
@@ -21,10 +20,10 @@ struct LoginView: View {
         VStack(spacing: 20) {
             
         NavigationStack {
-                if isLoggedIn {
-                    AccountView()
-
-                } else {
+            if appState.isLoggedIn, let company = appState.company {
+                AccountView(company: company)
+            }
+                else {
                     Spacer()
 
                     // Giriş Tipi Seçimi
@@ -68,9 +67,9 @@ struct LoginView: View {
                     }
 
                     Button(action: {
-                        viewModel.login {
-                               appState.completeLogin()
-                           }
+                        viewModel.login(appState: appState) {
+                            appState.completeLogin()
+                        }
                     }) {
                         if viewModel.isLoading {
                             ProgressView()
@@ -83,6 +82,7 @@ struct LoginView: View {
                                 .cornerRadius(10)
                         }
                     }
+
 
                     Spacer()
 

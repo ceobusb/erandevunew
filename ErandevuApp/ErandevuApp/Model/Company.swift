@@ -28,12 +28,41 @@ struct Sponsor: Identifiable, Hashable {
     let address: String
 }
 
-
-struct CompanyModel: Codable {
-    let firma_id: String
+struct CompanyModel: Codable, Identifiable {
+    let id: Int
     let company_name: String
-    let email: String
+    let sector_id: Int
+    let description: String?
+    let address: String?
+    let latitude: Double?
+    let longitude: Double?
+    let full_name: String
+    let email: String? // ← opsiyonel yapıldı
+    let logo_path: String?
+    let status: Int
+    let created_at: String
+    let sektor_name: String
+
+    enum CodingKeys: String, CodingKey {
+        case id
+        case company_name
+        case sector_id
+        case description
+        case address
+        case latitude
+        case longitude
+        case full_name
+        case email
+        case logo_path
+        case status
+        case created_at
+        case sektor_name
+    }
 }
+
+
+
+
 
 
 

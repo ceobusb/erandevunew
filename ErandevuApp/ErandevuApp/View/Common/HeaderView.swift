@@ -38,7 +38,13 @@ struct HeaderView: View {
             // Sağ üst ikonlar
             if appState.isLoggedIn {
                 HStack(spacing: 20) {
-                    NavigationLink(destination: AccountView()) {
+                    NavigationLink(destination: {
+                        if let company = appState.company {
+                            AccountView(company: company)
+                        } else {
+                            EmptyView()
+                        }
+                    }) {
                         Image(systemName: "person.crop.circle")
                             .font(.system(size: 18))
                             .foregroundColor(.black)

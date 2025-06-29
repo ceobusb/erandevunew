@@ -66,7 +66,6 @@ struct EmailVerificationView: View {
                 message: Text(alertMessage),
                 dismissButton: .default(Text("Tamam")) {
                     if onAlertDismissed {
-                       
                         appState.userEmail = email
                         appState.isEmailVerified = true
                         appState.isLoggedIn = true
@@ -88,13 +87,14 @@ struct EmailVerificationView: View {
         }
 
         isVerifying = true
-        EmailAPI.confirmVerificationCode(email: email, code: code) { success, message in
-            DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
+        EmailAPI.confirmVerificationCode(email: email, code: code) { success, message, data in
+            DispatchQueue.main.async {
                 isVerifying = false
-                if success {
-            
+                if success, let firma = data {
                     alertMessage = "Doğrulama başarılı"
-                    onAlertDismissed = true // ✅ tetikle
+                    appState.FirmaId = firma.firma_id
+                    appState.FirmaAdi = firma.firma_name
+                    onAlertDismissed = true
                     showAlert = true
                 } else {
                     alertMessage = message
@@ -102,6 +102,7 @@ struct EmailVerificationView: View {
                 }
             }
         }
+
     }
 
 

@@ -23,7 +23,12 @@ struct RootView: View {
             .navigationDestination(for: String.self) { route in
                 switch route {
                 case "Account":
-                    AccountView()
+                    if let company = appState.company {
+                        AccountView(company: company)
+                    } else {
+                        Text("Firma bilgisi eksik")
+                    }
+
                 case "Register":
                     RegisterView()
                 case "EmailVerification":

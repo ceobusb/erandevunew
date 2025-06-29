@@ -66,7 +66,7 @@ class FirmaService {
 
         URLSession.shared.dataTask(with: request) { d, r, e in
             if let d = d,
-               let res = try? JSONDecoder().decode(GenericResponse.self, from: d) {
+               let res = try? JSONDecoder().decode(GenericResponses.self, from: d) {
                 completion(res.status, res.message)
             } else {
                 completion(false, "Sunucu hatası")
@@ -134,12 +134,14 @@ class FirmaService {
             do {
                 let decoded = try JSONDecoder().decode(APIResponse<CompanyModel>.self, from: data)
 
-                if decoded.status, let data = decoded.data {
-                    completion(.success(data))
+           
+                if decoded.status, let company = decoded.data {
+                    completion(.success(company))
                 } else {
                     let apiError = NSError(domain: "", code: -1, userInfo: [NSLocalizedDescriptionKey: decoded.message])
                     completion(.failure(apiError))
                 }
+
 
 
             } catch {
@@ -165,3 +167,5 @@ struct FeaturedCompanyResponse: Codable {
     let message: String
     let data: [FeaturedCompany]
 }
+
+

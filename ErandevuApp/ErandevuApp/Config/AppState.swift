@@ -4,6 +4,11 @@ class AppState: ObservableObject {
     // Kullanıcının giriş yapıp yapmadığını tutar
     @Published var isLoggedIn: Bool = false
     @Published var isEmailVerified: Bool = false
+    @Published var FirmaId: Int = 0
+    @Published var FirmaAdi: String = ""
+    @Published var company: CompanyModel? // ✅ EKLE
+    @Published var FirmaLogo: String? = nil
+    
 
     // E-mail bilgisi (kayıt aşamasında tutulur)
     @Published var userEmail: String? = nil
@@ -25,9 +30,11 @@ class AppState: ObservableObject {
 
     // Çıkış işlemi
     func logout() {
-        isLoggedIn = false
+         isLoggedIn = false
          isEmailVerified = false
          userEmail = nil
+         FirmaId = 0
+          FirmaAdi = ""
          path = NavigationPath()
     }
 }

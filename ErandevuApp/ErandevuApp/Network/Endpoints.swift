@@ -18,7 +18,7 @@ struct Endpoints {
     struct Firma {
         static let register = "\(baseURL)/create_firma"
         static let sendCode = "\(baseURL)/create_firma_kod"
-        static let verifyCode = "\(baseURL)/confirm_firma_kod"
+        static let verifyCode = "\(baseURL)/confirm_firma_kod" 
         static let featuredCompanies = "\(baseURL)/get_featured_companies"
         static let resend_firma_kod = "\(baseURL)/resend_firma_kod"
         static let login = "\(baseURL)/firma_login"

@@ -1,5 +1,7 @@
 import SwiftUI
 import SDWebImageSwiftUI
+import CoreLocation
+
 struct SponsorView: View {
     @State private var companies: [FeaturedCompany] = []
     @State private var selectedDistance = 5 // km cinsinden
@@ -26,11 +28,22 @@ struct SponsorView: View {
             }
             .pickerStyle(SegmentedPickerStyle())
             .padding(.horizontal)
-            .onChange(of: locationManager.locationFetched) {
-                if $0 {
-                    fetchData()
+            .onReceive(locationManager.$locationFetched) { fetched in
+                if fetched, let coordinate = locationManager.location {
+                    fetchData(with: coordinate)
                 }
             }
+            .onChange(of: selectedDistance) { _ in
+                if let coordinate = locationManager.location {
+                    fetchData(with: coordinate)
+                }
+            }
+
+
+
+
+
+
 
 
             if isLoading {
@@ -50,24 +63,13 @@ struct SponsorView: View {
                 .padding(.horizontal)
             }
         }
-        .onAppear {
-            fetchData()
-        }
-        .onChange(of: userLatitude) { _ in
-            fetchData()
-        }
-        .onChange(of: userLongitude) { _ in
-            fetchData()
-        }
+     
+
+
 
     }
 
-    func fetchData() {
-        guard let coordinate = locationManager.location else {
-            print("Konum alınmamış")
-            return
-        }
-
+    func fetchData(with coordinate: CLLocationCoordinate2D) {
         isLoading = true
 
         FirmaService.shared.fetchNearbyCompanies(
@@ -86,6 +88,7 @@ struct SponsorView: View {
             }
         }
     }
+
 
 
 }

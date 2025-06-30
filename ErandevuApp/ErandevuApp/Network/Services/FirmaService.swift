@@ -129,6 +129,7 @@ class FirmaService {
                 completion(.failure(NSError(domain: "", code: -2, userInfo: [NSLocalizedDescriptionKey: "Veri alınamadı"])))
                 return
             }
+            print(String(data: data, encoding: .utf8) ?? "Veri çözümlenemedi")
 
             
             

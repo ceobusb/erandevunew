@@ -6,23 +6,26 @@ class LocationManager: NSObject, ObservableObject, CLLocationManagerDelegate {
 
     @Published var location: CLLocationCoordinate2D?
     @Published var errorMessage: String?
-    @Published var locationFetched = false
+     @Published var locationFetched = false
 
-
-    override init() {
-        super.init()
-        manager.delegate = self
-        manager.desiredAccuracy = kCLLocationAccuracyBest
-        manager.requestWhenInUseAuthorization()
-        manager.startUpdatingLocation()
-    }
+     override init() {
+         super.init()
+         manager.delegate = self
+         manager.desiredAccuracy = kCLLocationAccuracyBest
+         manager.requestWhenInUseAuthorization()
+         manager.startUpdatingLocation()
+     }
 
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
-        location = locations.first?.coordinate
-        errorMessage = nil
-        self.locationFetched = true // ✅ Bu satır eksikti
+        if let loc = locations.first?.coordinate {
+            location = loc
+            locationFetched = true  // 🔔 konum başarıyla alındı
+            errorMessage = nil
+            manager.stopUpdatingLocation() // 🔴 Bu satırı EKLE
 
+        }
     }
+
 
     func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
         errorMessage = "Konum alınamadı"

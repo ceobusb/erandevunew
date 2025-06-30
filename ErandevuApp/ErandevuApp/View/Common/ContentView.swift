@@ -1,36 +1,97 @@
 import SwiftUI
 
 struct ContentView: View {
-    @State private var showMenu = false
     @EnvironmentObject var appState: AppState
+    @State private var currentIndex = 0
+    @State private var showMenu: Bool = false
+
+    let features = [
+        ("Takvim ile Kolay Randevu", "Randevularınızı hızlıca yönetin.", "calendar", Color.purple),
+        ("Personel Yönetimi", "Personel planlamasını yapın.", "person.2.fill", Color.red),
+        ("Hizmet Tanımları", "Sunduğunuz hizmetleri ekleyin.", "list.bullet.rectangle.portrait", Color.blue),
+        ("Bildirimler", "Hatırlatmalarla müşterinizi bilgilendirin.", "bell.badge.fill", Color.green)
+    ]
 
     var body: some View {
-        ZStack {
-            Color(UIColor.systemGroupedBackground)
-                .ignoresSafeArea(.all, edges: .top)
-
+        ZStack(alignment: .leading) {
             VStack(spacing: 0) {
-                // Header
-                HeaderView(showMenu: $showMenu)
+                HeaderView(showMenu: $appState.showMenu)
                     .background(Color.orange)
-                    .shadow(color: .black.opacity(0.2), radius: 4, x: 0, y: 2)
-                    .overlay(
-                        Rectangle()
-                            .frame(height: 0.5)
-                            .foregroundColor(Color.black.opacity(0.15))
-                            .padding(.top, 50),
-                        alignment: .bottom
-                    )
 
-                // Ana içerik
-                ScrollView(showsIndicators: false) {
-                    WelcomeView()
+                ScrollView {
+                    VStack(spacing: 24) {
+                        // Bilgilendirici Kaydırmalı Alan
+                        InfoSliderView()
+
+                        // Öne çıkan sponsor firmalar
+                        SponsorView()
+
+                        // Sektör tanıtımı
+                        SectorShowcaseView()
+
+                        // Özellik kartları
+                        TabView(selection: $currentIndex) {
+                            ForEach(0..<features.count, id: \.self) { index in
+                                VStack {
+                                    Image(systemName: features[index].2)
+                                        .resizable()
+                                        .scaledToFit()
+                                        .frame(width: 50, height: 50)
+                                        .padding()
+                                        .background(Color.white.opacity(0.2))
+                                        .clipShape(Circle())
+                                        .foregroundColor(.white)
+
+                                    Text(features[index].0)
+                                        .font(.headline)
+                                        .foregroundColor(.white)
+
+                                    Text(features[index].1)
+                                        .font(.subheadline)
+                                        .foregroundColor(.white)
+                                        .multilineTextAlignment(.center)
+                                }
+                                .padding()
+                                .frame(maxWidth: .infinity)
+                                .background(features[index].3)
+                                .cornerRadius(20)
+                                .padding(.horizontal, 16)
+                            }
+                        }
+                        .frame(height: 220)
+                        .tabViewStyle(PageTabViewStyle())
+                    }
+                    .padding(.bottom, 40)
                 }
 
-                // Footer
                 FooterView()
             }
-            .edgesIgnoringSafeArea(.bottom)
+
+            // Menü Açıkken Arka Plan Kapatıcı ve Yan Menü
+            if appState.showMenu {
+                Color.black.opacity(0.3)
+                    .ignoresSafeArea()
+                    .onTapGesture {
+                        withAnimation {
+                            appState.showMenu = false
+                        }
+                    }
+
+                if showMenu {
+                    SideMenuView(showMenu: $showMenu)
+                        .transition(.move(edge: .leading))
+                        .zIndex(1)
+                }
+
+            }
+        }
+        .navigationBarHidden(true)
+        .navigationBarBackButtonHidden(true)
+        .onAppear {
+            // Giriş yapılmamışsa logout
+            if !appState.isLoggedIn && appState.FirmaId > 0 {
+                appState.logout()
+            }
         }
     }
 }

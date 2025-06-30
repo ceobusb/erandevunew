@@ -1,42 +1,27 @@
 import SwiftUI
-
 struct MainLayout<Content: View>: View {
-    var userName: String
-    let content: Content
-
-    @State private var showMenu = false
-
-    init(userName: String, @ViewBuilder content: () -> Content) {
-        self.userName = userName
-        self.content = content()
-    }
+    @Binding var showMenu: Bool
+    let content: () -> Content
 
     var body: some View {
-        ZStack {
-            NavigationStack {
-                VStack(spacing: 0) {
-                    HeaderView(showMenu: $showMenu)
-                    content
-                    FooterView()
-                }
-                .background(Color(.systemGroupedBackground))
+        ZStack(alignment: .leading) {
+            VStack(spacing: 0) {
+                HeaderView(showMenu: $showMenu)
+                content()
+                FooterView()
             }
 
-            // Side Menu
             if showMenu {
                 Color.black.opacity(0.3)
-                    .ignoresSafeArea()
+                    .edgesIgnoringSafeArea(.all)
                     .onTapGesture {
                         withAnimation {
                             showMenu = false
                         }
                     }
-
-                SideMenuView()
-                    .transition(.move(edge: .leading))
-                    .zIndex(1)
+                    .zIndex(0)
             }
+
         }
     }
 }
-

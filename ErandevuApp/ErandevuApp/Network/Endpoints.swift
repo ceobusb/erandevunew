@@ -27,6 +27,7 @@ struct Endpoints {
     struct Customer {
         static let list = "\(baseURL)/customers"
         static let detail = "\(baseURL)/customer/detail"
+        static let register = "\(baseURL)/create_customer"
     }
     
 

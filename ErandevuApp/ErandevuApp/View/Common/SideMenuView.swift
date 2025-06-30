@@ -1,35 +1,83 @@
 import SwiftUI
 
 struct SideMenuView: View {
-    @State private var selectedSponsor: Sponsor? = nil
+    @EnvironmentObject var appState: AppState
+    @Binding var showMenu: Bool  // ✅ Bunu ekliyoruz
 
     var body: some View {
         VStack(alignment: .leading, spacing: 20) {
             Text("Menü")
-                .font(.headline)
+                .font(.title2)
+                .bold()
                 .padding(.top, 40)
 
-            NavigationLink(destination: WelcomeView()) {
+            Button {
+                appState.path = NavigationPath()
+                appState.path.append("Home")
+                showMenu = false
+            } label: {
                 Label("Anasayfa", systemImage: "house")
             }
 
-            NavigationLink(destination: RandevuKayitView()) {
+            Button {
+                if appState.isLoggedIn {
+                    appState.path = NavigationPath()
+                    appState.path.append("Randevu")
+                } else {
+                    appState.path = NavigationPath()
+                    appState.path.append("Login")
+                }
+                showMenu = false
+            } label: {
                 Label("Randevu Oluştur", systemImage: "calendar.badge.plus")
             }
 
-            NavigationLink(destination: LoginView()) {
-                Label("Giriş Yap", systemImage: "person.fill")
-            }
+            if !appState.isLoggedIn {
+                Button {
+                    appState.path = NavigationPath()
+                    appState.path.append("Login")
+                    showMenu = false
+                } label: {
+                    Label("Giriş Yap", systemImage: "person.fill")
+                }
 
-            NavigationLink(destination: RegisterView()) {
-                Label("Kayıt Ol", systemImage: "person.badge.plus")
+                Button {
+                    appState.path = NavigationPath()
+                    appState.path.append("Register")
+                    showMenu = false
+                } label: {
+                    Label("Kayıt Ol", systemImage: "person.badge.plus")
+                }
+            } else {
+                Divider().padding(.vertical)
+
+                Button {
+                    appState.path = NavigationPath()
+                    appState.path.append("Account")
+                    showMenu = false
+                } label: {
+                    Label("Firma Profili", systemImage: "building.2.crop.circle")
+                }
+
+                Button {
+                    appState.logout()
+                    withAnimation {
+                        showMenu = false
+                        appState.path = NavigationPath()
+                        appState.path.append("Home")
+                    }
+                } label: {
+                    Label("Çıkış Yap", systemImage: "arrow.left.circle.fill")
+                        .foregroundColor(.red)
+                }
             }
 
             Spacer()
         }
         .padding()
-        .frame(maxWidth: .infinity, alignment: .leading)
-        .frame(width: 250)
-        .background(Color.white.shadow(radius: 5))
+        .frame(width: 260)
+        .background(Color.white)
+        .edgesIgnoringSafeArea(.vertical)
+        .shadow(radius: 5)
     }
 }

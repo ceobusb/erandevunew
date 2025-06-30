@@ -150,8 +150,46 @@ class FirmaService {
 
         }.resume()
     }
+    
+    static func registerMusteri(fullName: String, email: String, password: String, address: String, latitude: Double, longitude: Double, completion: @escaping (Bool, String) -> Void) {
+        guard let url = URL(string: Endpoints.Customer.register) else {
+            completion(false, "URL hatalı")
+            return
+        }
+
+        var request = URLRequest(url: url)
+        request.httpMethod = "POST"
+        request.setValue("application/x-www-form-urlencoded", forHTTPHeaderField: "Content-Type")
+        request.setValue(Endpoints.apikey, forHTTPHeaderField: "X-Api-Key")
+
+        let params = "full_name=\(fullName)&email=\(email)&password=\(password)&address=\(address)&latitude=\(latitude)&longitude=\(longitude)&role=2"
+        request.httpBody = params.data(using: .utf8)
+
+        URLSession.shared.dataTask(with: request) { data, response, error in
+            if let error = error {
+                completion(false, error.localizedDescription)
+                return
+            }
+
+            guard let data = data else {
+                completion(false, "Sunucudan veri alınamadı.")
+                return
+            }
+
+            if let json = try? JSONDecoder().decode(APIMessageResponse.self, from: data) {
+                completion(json.success, json.message)
+            } else {
+                completion(false, "Yanıt çözümlenemedi.")
+            }
+        }.resume()
+    }
 
 
+
+}
+struct APIMessageResponse: Codable {
+    let success: Bool
+    let message: String
 }
 
 

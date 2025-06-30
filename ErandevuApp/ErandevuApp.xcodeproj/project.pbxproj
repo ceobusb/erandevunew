@@ -206,11 +206,12 @@
 				};
 			};
 			buildConfigurationList = 5F5E50712E07173200EACE41 /* Build configuration list for PBXProject "ErandevuApp" */;
-			developmentRegion = en;
+			developmentRegion = tr;
 			hasScannedForEncodings = 0;
 			knownRegions = (
 				en,
 				Base,
+				tr,
 			);
 			mainGroup = 5F5E506D2E07173200EACE41;
 			minimizedProjectReferenceProxies = 1;

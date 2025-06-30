@@ -8,11 +8,11 @@ struct HeaderView: View {
     var body: some View {
         HStack {
             // Menü ikonu
-            Button(action: {
+            Button {
                 withAnimation {
                     showMenu.toggle()
                 }
-            }) {
+            } label: {
                 Image(systemName: "line.3.horizontal")
                     .font(.system(size: 20, weight: .medium))
                     .foregroundColor(.black)
@@ -38,50 +38,54 @@ struct HeaderView: View {
             // Sağ üst ikonlar
             if appState.isLoggedIn {
                 HStack(spacing: 20) {
-                    NavigationLink(destination: {
-                        if let company = appState.company {
-                            AccountView(company: company)
-                        } else {
-                            EmptyView()
-                        }
-                    }) {
+                    // 👤 Hesap
+                    Button {
+                        appState.path = NavigationPath()
+                        appState.path.append("Account")
+                    } label: {
                         Image(systemName: "person.crop.circle")
                             .font(.system(size: 18))
                             .foregroundColor(.black)
                     }
 
+                    // 🔓 Çıkış
                     if isLoggingOut {
                         ProgressView()
                             .progressViewStyle(CircularProgressViewStyle())
                             .frame(width: 20, height: 20)
                             .foregroundColor(.black)
                     } else {
-                        Button(action: {
+                        Button {
                             withAnimation {
                                 isLoggingOut = true
                             }
-
                             DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
                                 appState.logout()
                                 isLoggingOut = false
                             }
-                        }) {
+                        } label: {
                             Image(systemName: "rectangle.portrait.and.arrow.right.fill")
                                 .font(.system(size: 20))
                                 .foregroundColor(.black)
                         }
                     }
                 }
-
             } else {
+                // 🔐 Giriş / Kayıt
                 HStack(spacing: 20) {
-                    NavigationLink(destination: LoginView()) {
+                    Button {
+                        appState.path = NavigationPath()
+                        appState.path.append("Login")
+                    } label: {
                         Image(systemName: "person.fill")
                             .font(.system(size: 18))
                             .foregroundColor(.black)
                     }
 
-                    NavigationLink(destination: RegisterView()) {
+                    Button {
+                        appState.path = NavigationPath()
+                        appState.path.append("Register")
+                    } label: {
                         Image(systemName: "person.badge.plus")
                             .font(.system(size: 18))
                             .foregroundColor(.black)

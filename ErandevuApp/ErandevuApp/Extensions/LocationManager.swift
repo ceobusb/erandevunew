@@ -29,4 +29,8 @@ class LocationManager: NSObject, ObservableObject, CLLocationManagerDelegate {
             errorMessage = "Konum izni reddedildi"
         }
     }
+    func requestLocation() {
+        manager.requestLocation()
+    }
+
 }

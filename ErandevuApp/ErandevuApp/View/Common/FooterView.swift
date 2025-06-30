@@ -2,30 +2,25 @@ import SwiftUI
 
 struct FooterView: View {
     var body: some View {
-        VStack(spacing: 6) {
+        VStack(spacing: 12) {
             Divider()
 
-            HStack {
-                Spacer()
-                VStack(alignment: .trailing, spacing: 4) {
-                    Text("© 2025 E-Randevu")
-                        .font(.footnote)
-                        .foregroundColor(.gray)
-
-                    HStack(spacing: 20) {
-                        Link("Gizlilik Politikası", destination: URL(string: "https://erandevu.com/gizlilik")!)
-                        Link("Kullanım Şartları", destination: URL(string: "https://erandevu.com/sartlar")!)
-                    }
+            VStack(spacing: 6) {
+                Text("E-Randevu © 2025")
                     .font(.footnote)
-                    .foregroundColor(.blue)
-                }
-            }
-            .padding(.horizontal)
-            .padding(.bottom, 10)
-            .padding(.vertical, 20)
-        }
+                    .fontWeight(.semibold)
+                    .foregroundColor(.secondary)
 
-   
-        .background(Color(UIColor.systemGroupedBackground)) 
+                HStack(spacing: 20) {
+                    Link("Gizlilik Politikası", destination: URL(string: "https://erandevu.com/gizlilik")!)
+                    Link("Kullanım Şartları", destination: URL(string: "https://erandevu.com/sartlar")!)
+                }
+                .font(.footnote)
+                .foregroundColor(.blue)
+            }
+            .padding(.vertical, 12)
+        }
+        .frame(maxWidth: .infinity)
+        .background(Color(UIColor.secondarySystemGroupedBackground))
     }
 }

@@ -10,7 +10,6 @@ struct EmailVerificationView: View {
     @State private var isCodeResending = false
     @State private var onAlertDismissed = false
 
-
     @EnvironmentObject var appState: AppState
 
     var body: some View {
@@ -34,7 +33,6 @@ struct EmailVerificationView: View {
             Button(action: verifyCode) {
                 if isVerifying {
                     ProgressView()
-                        .progressViewStyle(CircularProgressViewStyle())
                 } else {
                     Text("Kodu Doğrula")
                         .frame(maxWidth: .infinity)
@@ -49,7 +47,6 @@ struct EmailVerificationView: View {
             Button(action: resendCode) {
                 if isCodeResending {
                     ProgressView()
-                        .progressViewStyle(CircularProgressViewStyle())
                 } else {
                     Text("Kodu Tekrar Gönder")
                         .foregroundColor(.blue)
@@ -68,15 +65,14 @@ struct EmailVerificationView: View {
                     if onAlertDismissed {
                         appState.userEmail = email
                         appState.isEmailVerified = true
-                        appState.isLoggedIn = true
-                        appState.path = NavigationPath() // stack sıfırla
+                        appState.isLoggedIn = false // login henüz yapılmadı
+                        appState.path = NavigationPath()
+                        appState.path.append("Login") // Doğrulama sonrası login sayfasına
                         onAlertDismissed = false
-                        
                     }
                 }
             )
         }
-
     }
 
     func verifyCode() {
@@ -90,10 +86,8 @@ struct EmailVerificationView: View {
         EmailAPI.confirmVerificationCode(email: email, code: code) { success, message, data in
             DispatchQueue.main.async {
                 isVerifying = false
-                if success, let firma = data {
+                if success {
                     alertMessage = "Doğrulama başarılı"
-                    appState.FirmaId = firma.firma_id
-                    appState.FirmaAdi = firma.firma_name
                     onAlertDismissed = true
                     showAlert = true
                 } else {
@@ -102,11 +96,7 @@ struct EmailVerificationView: View {
                 }
             }
         }
-
     }
-
-
-
 
     func resendCode() {
         isCodeResending = true

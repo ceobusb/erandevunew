@@ -7,7 +7,7 @@ struct RandevuKayitView: View {
     @State private var not = ""
 
     var body: some View {
-        MainLayout(userName: "Misafir") {
+
             VStack(alignment: .leading, spacing: 20) {
                 Text("Yeni Randevu Oluştur")
                     .font(.title2)
@@ -40,6 +40,6 @@ struct RandevuKayitView: View {
                 Spacer()
             }
             .padding()
-        }
+        
     }
 }

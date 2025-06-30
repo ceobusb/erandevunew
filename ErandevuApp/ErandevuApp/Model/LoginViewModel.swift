@@ -5,10 +5,8 @@ class LoginViewModel: ObservableObject {
     @Published var password = ""
     @Published var isLoading = false
     @Published var errorMessage = ""
-    @EnvironmentObject var appState: AppState
 
-
-    func login(appState: AppState, onSuccess: @escaping () -> Void) {
+    func login(appState: AppState) {
         guard !email.isEmpty, !password.isEmpty else {
             errorMessage = "Tüm alanları doldurun"
             return
@@ -22,18 +20,14 @@ class LoginViewModel: ObservableObject {
                 self.isLoading = false
                 switch result {
                 case .success(let company):
-                    appState.FirmaId = company.id
-                    appState.FirmaAdi = company.company_name
-                    appState.company = company // ✅ EKLE
+                    appState.company = company
                     appState.isLoggedIn = true
-                    onSuccess()
-
+                    appState.completeLogin() // ✅ Stack temizle
+                    appState.path.append("Account") // ✅ Hesap ekranına git
                 case .failure(let error):
                     self.errorMessage = error.localizedDescription
                 }
             }
         }
-
     }
-
 }

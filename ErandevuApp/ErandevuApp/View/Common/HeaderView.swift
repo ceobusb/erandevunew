@@ -40,13 +40,17 @@ struct HeaderView: View {
                 HStack(spacing: 20) {
                     // 👤 Hesap
                     Button {
-                        appState.path = NavigationPath()
-                        appState.path.append("Account")
-                    } label: {
-                        Image(systemName: "person.crop.circle")
-                            .font(.system(size: 18))
-                            .foregroundColor(.black)
-                    }
+                             appState.path = []
+                             if appState.role == 1 {
+                                 appState.path.append(.firmaAccount)
+                             } else if appState.role == 2 {
+                                 appState.path.append(.customerAccount)
+                             }
+                         } label: {
+                             Image(systemName: "person.crop.circle")
+                                 .font(.system(size: 18))
+                                 .foregroundColor(.black)
+                         }
 
                     // 🔓 Çıkış
                     if isLoggingOut {
@@ -74,8 +78,8 @@ struct HeaderView: View {
                 // 🔐 Giriş / Kayıt
                 HStack(spacing: 20) {
                     Button {
-                        appState.path = NavigationPath()
-                        appState.path.append("Login")
+                        appState.path = []
+                        appState.path.append(.login)
                     } label: {
                         Image(systemName: "person.fill")
                             .font(.system(size: 18))
@@ -83,8 +87,8 @@ struct HeaderView: View {
                     }
 
                     Button {
-                        appState.path = NavigationPath()
-                        appState.path.append("Register")
+                        appState.path = []
+                        appState.path.append(.register)
                     } label: {
                         Image(systemName: "person.badge.plus")
                             .font(.system(size: 18))

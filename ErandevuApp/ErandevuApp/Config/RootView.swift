@@ -1,53 +1,74 @@
 import SwiftUI
 
 struct RootView: View {
+    
     @EnvironmentObject var appState: AppState
     
     var body: some View {
         NavigationStack(path: $appState.path) {
             // Başlangıç görünümü her zaman ContentView
             ContentView()
-                .navigationDestination(for: String.self) { route in
+                .navigationDestination(for: AppRoute.self) { route in
                     switch route {
-                    case "Home":
+                    case .home:
                         ContentView()
-                    case "RegisterFirma":
+
+                    case .registerFirma:
                         RegisterFirmaView()
-                    case "RegisterMusteri":
+
+                    case .registerMusteri:
                         RegisterMusteriView()
-                    case "Login":
+
+                    case .login:
                         LoginView()
-                    case "Register":
+
+                    case .register:
                         RegisterView()
-                        
-                    case "EmailVerification":
+
+                    case .emailVerification:
                         if let email = appState.userEmail {
                             EmailVerificationView(email: email)
                         } else {
                             ContentView()
                         }
-                        
-                    case "Account":
-                        if appState.isLoggedIn, let company = appState.company {
-                            AccountView(company: company)
+
+                    case .account:
+                        if appState.isLoggedIn, let firma = appState.company {
+                            AccountView(company: firma)
                         } else {
                             ContentView()
                         }
-                        
-                    case "SlotList":
-                        if let company = appState.company {
-                            SlotListView(companyID: company.id)
+
+                    case .customerAccount:
+                        if appState.isLoggedIn, let customer = appState.customer {
+                            CustomerAccountView(customer: customer)
                         } else {
                             ContentView()
                         }
-                        
-                    case "Randevu":
+
+                    case .slotList:
+                        if appState.isLoggedIn, let firma = appState.company {
+                            AccountView(company: firma)
+                            SlotListView(companyID: firma.id)
+                        } else {
+                            ContentView()
+                        }
+                       
+
+                    case .randevu:
                         RandevuKayitView()
-                        
-                    default:
-                        Text("Sayfa bulunamadı")
+
+                    case .firmaAccount:
+                        if appState.isLoggedIn, let firma = appState.company {
+                            AccountView(company: firma)
+                        } else {
+                            ContentView()
+                        }
                     }
                 }
+
+
+            
         }
     }
 }

@@ -66,8 +66,10 @@ struct EmailVerificationView: View {
                         appState.userEmail = email
                         appState.isEmailVerified = true
                         appState.isLoggedIn = false // login henüz yapılmadı
-                        appState.path = NavigationPath()
-                        appState.path.append("Login") // Doğrulama sonrası login sayfasına
+                        
+                        appState.path = []
+                        appState.path.append(.login)
+                      
                         onAlertDismissed = false
                     }
                 }

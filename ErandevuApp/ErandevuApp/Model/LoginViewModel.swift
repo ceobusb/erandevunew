@@ -6,7 +6,7 @@ class LoginViewModel: ObservableObject {
     @Published var isLoading = false
     @Published var errorMessage = ""
 
-    func login(appState: AppState) {
+    func login(appState: AppState, userType: LoginView.LoginType) {
         guard !email.isEmpty, !password.isEmpty else {
             errorMessage = "Tüm alanları doldurun"
             return
@@ -15,19 +15,45 @@ class LoginViewModel: ObservableObject {
         isLoading = true
         errorMessage = ""
 
-        FirmaService.login(email: email, password: password) { result in
-            DispatchQueue.main.async {
-                self.isLoading = false
-                switch result {
-                case .success(let company):
-                    appState.company = company
-                    appState.isLoggedIn = true
-                    appState.completeLogin() // ✅ Stack temizle
-                    appState.path.append("Account") // ✅ Hesap ekranına git
-                case .failure(let error):
-                    self.errorMessage = error.localizedDescription
+        switch userType {
+        case .firma:
+            FirmaService.login(email: email, password: password) { result in
+                DispatchQueue.main.async {
+                    self.isLoading = false
+                    switch result {
+                    case .success(let company):
+                        appState.userType = .firma
+                        appState.company = company
+                        appState.role = 1
+                        appState.isLoggedIn = true
+                        appState.path.append(.firmaAccount)
+
+                    case .failure(let error):
+                        self.errorMessage = error.localizedDescription
+                    }
                 }
             }
+
+        case .musteri:
+            MusteriService.login(email: email, password: password) { result in
+                DispatchQueue.main.async {
+                    switch result {
+                    case .success(let musteri):
+                        appState.userType = .customer
+                        appState.customer = musteri
+                        appState.role = 2
+                        appState.isLoggedIn = true
+                        appState.path.append(.customerAccount)
+
+
+                    case .failure(let error):
+                        self.errorMessage = error.localizedDescription
+                    }
+                }
+            }
+
+
         }
     }
+
 }

@@ -7,23 +7,84 @@ class AppState: ObservableObject {
     @Published var showMenu: Bool = false
     @Published var FirmaAdi: String = ""
     @Published var company: CompanyModel? = nil
+    @Published var customer: CustomerModel? 
+
     @Published var FirmaLogo: String? = nil
-    @Published var path = NavigationPath()
+    
+    @Published var path: [AppRoute] = []
+    @Published var userType: UserType?
     @Published var userEmail: String? = nil
+    
+    @Published var role: Int? = nil
+    @Published var locationManager = LocationManager()
+
 
     // ✅ Giriş tamamlandığında ContentView'den Account'a geçiş
     func completeLogin() {
         isLoggedIn = true
-        path = NavigationPath()
-        path.append("Account") // veya "Home" yapmak istersen değiştirebilirsin
+        path = []
+        switch userType {
+        case .firma:
+            path.append(.account)
+        case .customer:
+            path.append(.customerAccount)
+        case .none:
+            path.append(.home)
+        }
     }
+
+
 
     // ✅ Email doğrulandıktan sonra login'e değil Account'a yönlendir
     func completeEmailVerification() {
         isEmailVerified = true
-        path = NavigationPath()
-        path.append("Account")
+        path = []
+
+        guard let userType = userType else {
+            path.append(.home)
+            return
+        }
+
+        switch userType {
+        case .firma:
+            path.append(.account)
+        case .customer:
+            path.append(.customerAccount)
+        }
     }
+    
+    
+ 
+
+    var currentLatitude: Double {
+        if let lat = company?.latitude {
+            return lat
+        } else if let lat = customer?.latitude {
+            return lat
+        } else if let lat = locationManager.location?.latitude {
+            return lat
+        } else {
+            return 41.0082 // fallback: İstanbul
+        }
+    }
+
+    var currentLongitude: Double {
+        if let lon = company?.longitude {
+            return lon
+        } else if let lon = customer?.longitude {
+            return lon
+        } else if let lon = locationManager.location?.longitude {
+            return lon
+        } else {
+            return 28.9784 // fallback: İstanbul
+        }
+    }
+
+
+
+
+
+
 
     // ✅ Çıkış işlemi
     func logout() {
@@ -32,13 +93,15 @@ class AppState: ObservableObject {
         userEmail = nil
         showMenu = false
         FirmaId = 0
+        role = nil
         FirmaAdi = ""
         company = nil
         FirmaLogo = nil
 
+     
         DispatchQueue.main.async {
-            self.path = NavigationPath()
-            self.path.append("Home") // Çıkıştan sonra Home'a yönlendir
+            self.path = []
+            self.path.append(.home)
         }
     }
 }

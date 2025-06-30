@@ -6,6 +6,8 @@ class LocationManager: NSObject, ObservableObject, CLLocationManagerDelegate {
 
     @Published var location: CLLocationCoordinate2D?
     @Published var errorMessage: String?
+    @Published var locationFetched = false
+
 
     override init() {
         super.init()
@@ -18,6 +20,8 @@ class LocationManager: NSObject, ObservableObject, CLLocationManagerDelegate {
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         location = locations.first?.coordinate
         errorMessage = nil
+        self.locationFetched = true // ✅ Bu satır eksikti
+
     }
 
     func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
@@ -32,5 +36,6 @@ class LocationManager: NSObject, ObservableObject, CLLocationManagerDelegate {
     func requestLocation() {
         manager.requestLocation()
     }
+    
 
 }

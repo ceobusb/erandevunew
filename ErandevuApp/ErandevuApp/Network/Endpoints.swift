@@ -22,12 +22,14 @@ struct Endpoints {
         static let featuredCompanies = "\(baseURL)/get_featured_companies"
         static let resend_firma_kod = "\(baseURL)/resend_firma_kod"
         static let login = "\(baseURL)/firma_login"
+        static let nearbyCompanies = "\(baseURL)/nearby_companies_get"
     }
 
     struct Customer {
         static let list = "\(baseURL)/customers"
         static let detail = "\(baseURL)/customer/detail"
         static let register = "\(baseURL)/create_customer"
+        static let login = "\(baseURL)/customer_login"
     }
     
 

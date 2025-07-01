@@ -55,6 +55,7 @@ struct RegisterFirmaView: View {
     @State private var isLoading = false
     @State private var showSectorDialog = false
     @State private var showMenu = false
+    @Environment(\.presentationMode) var presentationMode
 
     var body: some View {
         Group {
@@ -62,7 +63,9 @@ struct RegisterFirmaView: View {
                 ProgressView("Kayıt yapılıyor...")
                     .padding()
             } else {
-                MainLayout(showMenu: $showMenu) {
+                CustomHeaderView(title: "") {
+                              presentationMode.wrappedValue.dismiss()
+                          }
                     ScrollView {
                         VStack(spacing: 24) {
                             Text("Firma Kaydı")
@@ -87,7 +90,7 @@ struct RegisterFirmaView: View {
                         .navigationBarBackButtonHidden(true)
                         .navigationTitle("")
                     }
-                }
+                
             }
         }
         .onAppear {

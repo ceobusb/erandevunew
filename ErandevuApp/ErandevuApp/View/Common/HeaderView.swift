@@ -15,7 +15,7 @@ struct HeaderView: View {
             } label: {
                 Image(systemName: "line.3.horizontal")
                     .font(.system(size: 20, weight: .medium))
-                    .foregroundColor(.black)
+                    .foregroundColor(Color(.black))
                     .frame(width: 40, alignment: .leading)
             }
 
@@ -26,11 +26,11 @@ struct HeaderView: View {
                 Image(systemName: "calendar.circle.fill")
                     .resizable()
                     .frame(width: 24, height: 24)
-                    .foregroundColor(.black)
+                    .foregroundColor(Color(.black))
                 Text("E-Randevu")
                     .font(.headline)
                     .fontWeight(.bold)
-                    .foregroundColor(.black)
+                    .foregroundColor(Color(.black))
             }
 
             Spacer()
@@ -49,7 +49,7 @@ struct HeaderView: View {
                          } label: {
                              Image(systemName: "person.crop.circle")
                                  .font(.system(size: 18))
-                                 .foregroundColor(.black)
+                                 .foregroundColor(Color(.black))
                          }
 
                     // 🔓 Çıkış
@@ -57,7 +57,7 @@ struct HeaderView: View {
                         ProgressView()
                             .progressViewStyle(CircularProgressViewStyle())
                             .frame(width: 20, height: 20)
-                            .foregroundColor(.black)
+                            .foregroundColor(Color(.black))
                     } else {
                         Button {
                             withAnimation {
@@ -70,7 +70,7 @@ struct HeaderView: View {
                         } label: {
                             Image(systemName: "rectangle.portrait.and.arrow.right.fill")
                                 .font(.system(size: 20))
-                                .foregroundColor(.black)
+                                .foregroundColor(Color(.black))
                         }
                     }
                 }
@@ -83,7 +83,7 @@ struct HeaderView: View {
                     } label: {
                         Image(systemName: "person.fill")
                             .font(.system(size: 18))
-                            .foregroundColor(.black)
+                            .foregroundColor(Color(.black))
                     }
 
                     Button {
@@ -92,7 +92,7 @@ struct HeaderView: View {
                     } label: {
                         Image(systemName: "person.badge.plus")
                             .font(.system(size: 18))
-                            .foregroundColor(.black)
+                            .foregroundColor(Color(.black))
                     }
                 }
                 .frame(width: 60, alignment: .trailing)
@@ -100,6 +100,6 @@ struct HeaderView: View {
         }
         .padding(.horizontal)
         .padding(.vertical, 20)
-        .background(Color(UIColor.systemGroupedBackground))
+        .background(Color(.white))
     }
 }

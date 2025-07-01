@@ -121,19 +121,7 @@ struct CompanyItemView: View {
                 .foregroundColor(.gray)
                 .lineLimit(1)
             
-            // Randevu Al butonu
-            Button(action: {
-                // Navigation yapılabilir
-                print("Randevu alınacak: \(company.company_name)")
-            }) {
-                Text("Randevu Al")
-                    .font(.caption)
-                    .foregroundColor(.white)
-                    .padding(.vertical, 4)
-                    .padding(.horizontal, 12)
-                    .background(Color.blue)
-                    .cornerRadius(8)
-            }
+          
         }
         .padding()
         .frame(width: 140)
@@ -153,5 +141,9 @@ extension Sponsor {
         self.description = company.description
         self.rating = company.rating
         self.address = company.address
+        self.business_phone = company.business_phone ?? "Telefon yok"
+        self.mobile_phone = company.mobile_phone ?? "Telefon yok"
+        self.working_hours = company.working_hours ?? "Çalışma saatleri belirtilmedi"
+
     }
 }

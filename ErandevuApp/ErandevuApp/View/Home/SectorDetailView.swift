@@ -9,9 +9,12 @@ struct SectorDetailView: View {
     @State private var selectedDistance = 5
     let distances = [1, 5, 10, 20, 50]
     @State private var showMenu: Bool = false
-    
+    @Environment(\.presentationMode) var presentationMode
+
     var body: some View {
-        MainLayout(showMenu: $showMenu) {
+        CustomHeaderView(title: "") {
+                      presentationMode.wrappedValue.dismiss()
+                  }
             ScrollView {
                 VStack(spacing: 20) {
                     // Sektör Bilgisi
@@ -55,7 +58,7 @@ struct SectorDetailView: View {
             .navigationTitle("")
             
             
-        }
+        
     }
     
     var sectorHeader: some View {

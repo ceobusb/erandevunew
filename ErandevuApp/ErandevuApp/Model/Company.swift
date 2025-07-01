@@ -10,6 +10,9 @@ struct Company: Identifiable {
     let longitude: Double
     let address: String
     let completedJobs: Int
+    let business_phone: String
+    let mobile_phone: String
+    let working_hours: String
     
     
 
@@ -26,6 +29,10 @@ struct Sponsor: Identifiable, Hashable {
     let description: String
     let rating: Double
     let address: String
+    let business_phone: String
+    let mobile_phone: String
+    let working_hours: String
+    
 }
 
 struct CompanyModel: Codable, Identifiable {
@@ -42,6 +49,9 @@ struct CompanyModel: Codable, Identifiable {
     let status: Int
     let created_at: String
     let sektor_name: String
+    let business_phone: String?
+      let mobile_phone: String?
+      let working_hours: String?
 
     enum CodingKeys: String, CodingKey {
         case id
@@ -57,6 +67,9 @@ struct CompanyModel: Codable, Identifiable {
         case status
         case created_at
         case sektor_name
+        case business_phone
+        case mobile_phone
+        case working_hours
     }
 }
 

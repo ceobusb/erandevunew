@@ -3,12 +3,16 @@ import SwiftUI
 struct RegisterView: View {
     @EnvironmentObject var appState: AppState
     @Environment(\.dismiss) var dismiss
-    
+    @Environment(\.presentationMode) var presentationMode
+
     @State private var showMenu = false
     
     var body: some View {
-        MainLayout(showMenu: $showMenu) {
+        CustomHeaderView(title: "Firma Detay") {
+                      presentationMode.wrappedValue.dismiss()
+                  }
             ZStack(alignment: .leading) {
+               
                 VStack(spacing: 0) {
                     ScrollView {
                         Text("Kayıt Türünü Seçin")
@@ -40,7 +44,7 @@ struct RegisterView: View {
             .navigationBarBackButtonHidden(true)
             .navigationTitle("")
         
-        }
+        
      
     }
 }

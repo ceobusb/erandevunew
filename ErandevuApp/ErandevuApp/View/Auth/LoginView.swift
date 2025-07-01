@@ -10,10 +10,12 @@ struct LoginView: View {
     @EnvironmentObject var appState: AppState
     @StateObject private var viewModel = LoginViewModel()
     @State private var showMenu = false
-    
+    @Environment(\.presentationMode) var presentationMode
     
     var body: some View {
-        MainLayout(showMenu: $showMenu) {
+        CustomHeaderView(title: "") {
+                      presentationMode.wrappedValue.dismiss()
+                  }
             ScrollView {
                 VStack(spacing: 20) {
                     Spacer()
@@ -90,6 +92,6 @@ struct LoginView: View {
                 .navigationBarBackButtonHidden(true)
                 .navigationTitle("")
             }
-        }
+        
     }
 }

@@ -95,6 +95,7 @@ class FirmaService {
 
     
     static func fetchFeaturedCompanies(completion: @escaping (Result<[FeaturedCompany], Error>) -> Void) {
+       
         guard let url = URL(string: Endpoints.Firma.featuredCompanies) else {
             completion(.failure(NSError(domain: "", code: -1, userInfo: [NSLocalizedDescriptionKey: "URL Geçersiz"])))
             return
@@ -127,6 +128,7 @@ class FirmaService {
     
     static func fetchNearbyCompanies(latitude: Double, longitude: Double, distance: Int, completion: @escaping (Result<[FeaturedCompany], Error>) -> Void)
     {
+        
         let urlString = "\(Endpoints.Firma.nearbyCompanies)?latitude=\(latitude)&longitude=\(longitude)&distance=\(distance)"
         
         guard let url = URL(string: urlString) else {
@@ -145,6 +147,8 @@ class FirmaService {
                 return
             }
             
+            
+            
             guard let data = data else {
                 completion(.failure(NSError(domain: "", code: -2, userInfo: [NSLocalizedDescriptionKey: "Veri alınamadı"])))
                 return
@@ -155,6 +159,7 @@ class FirmaService {
             do {
                 let decoded = try JSONDecoder().decode(FeaturedCompanyResponse.self, from: data)
                 completion(.success(decoded.data))
+
             } catch {
                 completion(.failure(error))
             }

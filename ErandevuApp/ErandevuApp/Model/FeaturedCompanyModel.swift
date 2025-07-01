@@ -10,7 +10,9 @@ struct FeaturedCompany: Codable, Identifiable, Hashable {
     let company_name: String
     let icon: String
     let logo_url: String
-    
+    let business_phone: String?   // ✅ null olabilir
+    let mobile_phone: String?     // ✅ null olabilir
+    let working_hours: String?    // ✅ null olabilir
 
 }
 

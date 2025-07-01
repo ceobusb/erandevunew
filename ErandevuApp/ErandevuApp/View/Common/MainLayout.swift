@@ -42,12 +42,13 @@ struct MainLayout<Content: View>: View {
         .gesture(
             DragGesture()
                 .onEnded { value in
-                    if value.translation.width < -100 {
+                    if value.translation.width < -200 {
                         withAnimation {
                             showMenu = false
                         }
                     }
                 }
         )
+       
     }
 }

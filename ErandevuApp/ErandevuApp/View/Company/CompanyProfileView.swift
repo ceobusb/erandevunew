@@ -1,30 +1,33 @@
 import SwiftUI
 import SDWebImageSwiftUI
 
-
 struct CompanyProfileView: View {
     let company: FeaturedCompany
     @StateObject private var viewModel = CompanyProfileViewModel()
-
-    
     @Binding var selectedTab: Int
-
     @State private var showMenu = false
-    
+    @Environment(\.presentationMode) var presentationMode
+
     var body: some View {
-        MainLayout(showMenu: $showMenu) {
+  
             VStack(spacing: 0) {
+                CustomHeaderView(title: "Firma Detay") {
+                              presentationMode.wrappedValue.dismiss()
+                          }
                 ScrollView {
                     VStack(spacing: 0) {
                         // MARK: - Firma Logosu
                         ZStack {
                             Color.gray.opacity(0.2)
                             WebImage(url: URL(string: company.logo_url))
-                                .resizable()
-                                .indicator(.activity)
-                                .scaledToFill()
+                                   .resizable()
+                                   .indicator(.activity)
+                                   .scaledToFill()
+                                   .frame(height: 140)
+                                   .frame(maxWidth: .infinity)
+                                   .clipped() // !!! Taşmayı engeller
                         }
-                        .frame(height: 150)
+                        .frame(height: 180)
                         .frame(maxWidth: .infinity)
 
                         // MARK: - Firma Adı ve Puan
@@ -58,6 +61,10 @@ struct CompanyProfileView: View {
                             if selectedTab == 0 {
                                 if let firma = viewModel.firmaBilgi {
                                     VStack(alignment: .leading, spacing: 12) {
+                                        Text("Firma Bilgileri")
+                                            .font(.headline)
+                                            .padding(.horizontal)
+                                            .padding(.top)
                                         HStack(alignment: .top) {
                                             Image(systemName: "info.circle")
                                                 .foregroundColor(.blue)
@@ -70,6 +77,44 @@ struct CompanyProfileView: View {
                                             Text(firma.address)
                                                 .font(.body)
                                         }
+                                        HStack {
+                                            Image(systemName: "phone.fill")
+                                                .foregroundColor(.green)
+                                            Text(firma.business_phone ?? "İş telefonu yok")
+                                                .font(.body)
+                                        }
+
+                                        HStack {
+                                            Image(systemName: "phone.circle.fill")
+                                                .foregroundColor(.blue)
+                                            Text(firma.mobile_phone ?? "Mobil telefon yok")
+                                                .font(.body)
+                                        }
+
+                                        if let hours = firma.working_hours {
+                                            let splitted = hours.components(separatedBy: ",")
+                                            
+                                            VStack(alignment: .leading, spacing: 4) {
+                                                ForEach(Array(splitted.enumerated()), id: \.offset) { index, item in
+                                                    HStack {
+                                                        Image(systemName: "clock.fill")
+                                                            .foregroundColor(.orange)
+                                                        Text(item)
+                                                    }
+                                                }
+                                            }
+
+                                        }
+                                        else {
+                                            HStack {
+                                                Image(systemName: "clock.fill")
+                                                    .foregroundColor(.gray)
+                                                Text("Çalışma saatleri belirtilmemiş")
+                                            }
+                                        }
+
+
+
                                     }
                                     .padding()
                                     .frame(maxWidth: .infinity, alignment: .leading)
@@ -83,6 +128,10 @@ struct CompanyProfileView: View {
                             }
                             else if selectedTab == 1 {
                                 VStack(spacing: 8) {
+                                    Text("Firmanın Hizmetlei")
+                                        .font(.headline)
+                                        .padding(.horizontal)
+                                        .padding(.top)
                                     ForEach(viewModel.hizmetler, id: \.self) { hizmet in
                                         HStack {
                                             Image(systemName: company.icon) // sembol değişebilir
@@ -101,6 +150,10 @@ struct CompanyProfileView: View {
 
                             else if selectedTab == 2 {
                                 VStack(spacing: 8) {
+                                    Text("Firma Personelleri")
+                                        .font(.headline)
+                                        .padding(.horizontal)
+                                        .padding(.top)
                                     ForEach(viewModel.personeller, id: \.self) { person in
                                         HStack {
                                             Image(systemName: "person.fill")
@@ -116,21 +169,39 @@ struct CompanyProfileView: View {
                                 }
                             }
 
-                            
                             else if selectedTab == 3 {
-                                VStack(alignment: .leading, spacing: 16) {
-                                    ForEach(viewModel.yorumlar, id: \.self) { yorum in
-                                        HStack(alignment: .top) {
-                                            Image(systemName: "quote.bubble")
-                                                .foregroundColor(.blue)
-                                            Text(yorum)
-                                                .font(.body)
+                                ScrollView {
+                                    VStack(alignment: .leading, spacing: 12) {
+                                        Text("Kullanıcı Yorumları")
+                                            .font(.headline)
+                                            .padding(.horizontal)
+                                            .padding(.top)
+
+                                        ForEach(viewModel.yorumlar, id: \.self) { yorum in
+                                            HStack(alignment: .top, spacing: 10) {
+                                                Image(systemName: "quote.bubble.fill")
+                                                    .foregroundColor(.blue)
+                                                    .font(.system(size: 18))
+                                                    .padding(.top, 4)
+
+                                                Text(yorum)
+                                                    .font(.body)
+                                                    .foregroundColor(.black)
+                                                    .fixedSize(horizontal: false, vertical: true)
+
+                                                Spacer()
+                                            }
+                                            .padding()
+                                            .background(Color(.systemGray6))
+                                            .cornerRadius(12)
+                                            .padding(.horizontal)
                                         }
-                                        .padding(.horizontal)
                                     }
+                                    .padding(.bottom, 20)
                                 }
-                               
                             }
+
+
 
                         }
                         .padding(.top,8)
@@ -138,8 +209,7 @@ struct CompanyProfileView: View {
                         Spacer(minLength: 80) // İçerikle buton arasında boşluk bırak
                     }
                 }
-                .navigationBarBackButtonHidden(true)
-                .navigationTitle("")
+            
 
                 // MARK: - Sabit Randevu Al Butonu
                 Button(action: {
@@ -156,13 +226,19 @@ struct CompanyProfileView: View {
                 }
                 .padding(.bottom, 8)
             }
+            .navigationBarBackButtonHidden(true)
             .onAppear {
                 viewModel.fetchFirmaDetay(firmaId: company.id)
                 viewModel.fetchHizmetler(firmaId: company.id)
                 viewModel.fetchPersoneller(firmaId: company.id)
                 viewModel.fetchYorumlar(firmaId: company.id)
             }
-        }
+
+        
+     
+       
+  
+      
 
     }
 }

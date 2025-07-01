@@ -37,7 +37,6 @@
 		28C6260B2E097595007D1AC8 /* Exceptions for "ErandevuApp" folder in "ErandevuApp" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
-				Extensions/Untitled.swift,
 				Info.plist,
 			);
 			target = 5F5E50752E07173200EACE41 /* ErandevuApp */;
@@ -218,6 +217,7 @@
 			minimizedProjectReferenceProxies = 1;
 			packageReferences = (
 				28C6266C2E0AD80B007D1AC8 /* XCRemoteSwiftPackageReference "SDWebImageSwiftUI" */,
+				5FA1CE352E14757700AD47D5 /* XCLocalSwiftPackageReference "../../../erandevu/NavigationStyler" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 5F5E50772E07173200EACE41 /* Products */;
@@ -617,6 +617,13 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCLocalSwiftPackageReference section */
+		5FA1CE352E14757700AD47D5 /* XCLocalSwiftPackageReference "../../../erandevu/NavigationStyler" */ = {
+			isa = XCLocalSwiftPackageReference;
+			relativePath = ../../../erandevu/NavigationStyler;
+		};
+/* End XCLocalSwiftPackageReference section */
 
 /* Begin XCRemoteSwiftPackageReference section */
 		28C6266C2E0AD80B007D1AC8 /* XCRemoteSwiftPackageReference "SDWebImageSwiftUI" */ = {

@@ -17,6 +17,7 @@ struct RegisterMusteriView: View {
     @State private var showAlert = false
     @State private var alertMessage = ""
     @State private var showMenu = false
+    @Environment(\.presentationMode) var presentationMode
 
 
     var body: some View {
@@ -25,7 +26,9 @@ struct RegisterMusteriView: View {
                 ProgressView("Kayıt yapılıyor...")
                     .padding()
             } else {
-                MainLayout(showMenu: $showMenu) {
+                CustomHeaderView(title: "") {
+                              presentationMode.wrappedValue.dismiss()
+                          }
                     ScrollView {
                         VStack(spacing: 16) {
                             Text("Müşteri Kaydı")
@@ -87,7 +90,7 @@ struct RegisterMusteriView: View {
                     }
                     .navigationBarBackButtonHidden(true)
                     .navigationTitle("")
-                }
+                
             }
         }
         .onAppear {

@@ -37,6 +37,7 @@
 		28C6260B2E097595007D1AC8 /* Exceptions for "ErandevuApp" folder in "ErandevuApp" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
+				Extensions/Untitled.swift,
 				Info.plist,
 			);
 			target = 5F5E50752E07173200EACE41 /* ErandevuApp */;

@@ -25,7 +25,7 @@ struct ContentView: View {
                             // Bilgilendirici Kaydırmalı Alan
                             InfoSliderView()
                             
-                            // Öne çıkan sponsor firmalar
+                            // Yakındaki firmalar
                             SponsorView(
                                 locationManager: locationManager,
                                 userLatitude: appState.currentLatitude,
@@ -35,7 +35,10 @@ struct ContentView: View {
 
                             
                             // Sektör tanıtımı
-                            SectorShowcaseView()
+                            SectorShowcaseView( locationManager: locationManager,
+                                                userLatitude: appState.currentLatitude,
+                                                userLongitude: appState.currentLongitude
+                            )
                             
                             // Özellik kartları
                             TabView(selection: $currentIndex) {

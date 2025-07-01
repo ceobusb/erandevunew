@@ -3,10 +3,12 @@ import SwiftUI
 @main
 struct ErandevuAppApp: App {
     @StateObject var appState = AppState()
+    @State private var selectedTab: Int = 0
 
     var body: some Scene {
         WindowGroup {
-            RootView()
+            RootView(selectedTab: $selectedTab)
+
                 .environmentObject(appState)
         }
     }

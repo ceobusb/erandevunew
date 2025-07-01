@@ -1,8 +1,13 @@
 import SwiftUI
+import SDWebImageSwiftUI
+import CoreLocation
 
 struct SectorShowcaseView: View {
     @State private var sectors: [Sector] = []
-
+    @ObservedObject var locationManager: LocationManager
+    var userLatitude: Double
+     var userLongitude: Double
+    @EnvironmentObject var appState: AppState
     // 2 kolonlu grid yapısı
     let columns = [GridItem(.flexible()), GridItem(.flexible())]
 
@@ -15,7 +20,9 @@ struct SectorShowcaseView: View {
 
             LazyVGrid(columns: columns, spacing: 16) {
                 ForEach(sectors) { sector in
-                    NavigationLink(destination: SectorDetailView(sector: sector)) {
+                    Button(action: {
+                        appState.path.append(.sectorDetail(sector))
+                    }) {
                         VStack(spacing: 8) {
                             Image(systemName: sector.icon)
                                 .font(.title)
@@ -33,6 +40,7 @@ struct SectorShowcaseView: View {
                         .shadow(radius: 2)
                         .padding(.horizontal, 4)
                     }
+
                 }
             }
             .padding()

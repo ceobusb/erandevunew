@@ -18,12 +18,17 @@ struct Endpoints {
     struct Firma {
         static let register = "\(baseURL)/create_firma"
         static let sendCode = "\(baseURL)/create_firma_kod"
-        static let verifyCode = "\(baseURL)/confirm_firma_kod" 
+        static let verifyCode = "\(baseURL)/confirm_firma_kod"
         static let featuredCompanies = "\(baseURL)/get_featured_companies"
         static let resend_firma_kod = "\(baseURL)/resend_firma_kod"
         static let login = "\(baseURL)/firma_login"
         static let nearbyCompanies = "\(baseURL)/nearby_companies_get"
+        static let detail = "\(baseURL)/firmadetails"
+        static let services = "\(baseURL)/get_firma_services"
+        static let personeller = "\(baseURL)/get_firma_personeller"
+        static let yorumlar = "\(baseURL)/get_firma_comments"
     }
+
 
     struct Customer {
         static let list = "\(baseURL)/customers"

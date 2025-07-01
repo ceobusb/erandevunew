@@ -1,99 +1,192 @@
-import MapKit
 import SwiftUI
 import SDWebImageSwiftUI
 
 
-struct SponsorDetailView: View {
-    let sponsor: Sponsor
+struct CompanyProfileView: View {
+    let company: FeaturedCompany
+    @StateObject private var viewModel = CompanyProfileViewModel()
+
     
-    @State private var cameraPosition: MapCameraPosition
-    
-    init(sponsor: Sponsor) {
-        self.sponsor = sponsor
-        let latitude = sponsor.latitude
-        let longitude = sponsor.longitude
-        
-        _cameraPosition = State(
-            initialValue: .region(
-                MKCoordinateRegion(
-                    center: CLLocationCoordinate2D(
-                        latitude: latitude,
-                        longitude: longitude
-                    ),
-                    span: MKCoordinateSpan(
-                        latitudeDelta: 0.01,
-                        longitudeDelta: 0.01
-                    )
-                )
-            )
-        )
-    }
+    @Binding var selectedTab: Int
+
+    @State private var showMenu = false
     
     var body: some View {
-        VStack(spacing: 16) {
-            
-            
-            WebImage(url: URL(string: sponsor.logoUrl))
-                .onSuccess { image, data, cacheType in
-                    // Başarılı yükleme
+        MainLayout(showMenu: $showMenu) {
+            VStack(spacing: 0) {
+                ScrollView {
+                    VStack(spacing: 0) {
+                        // MARK: - Firma Logosu
+                        ZStack {
+                            Color.gray.opacity(0.2)
+                            WebImage(url: URL(string: company.logo_url))
+                                .resizable()
+                                .indicator(.activity)
+                                .scaledToFill()
+                        }
+                        .frame(height: 150)
+                        .frame(maxWidth: .infinity)
+
+                        // MARK: - Firma Adı ve Puan
+                        VStack(spacing: 4) {
+                            Text(company.company_name)
+                                .font(.headline)
+                                .bold()
+                                .foregroundColor(.black)
+                            StarRatingView(rating: company.rating)
+                        }
+                        .padding(8)
+                        .background(Color.white.opacity(0.80))
+                        .cornerRadius(10)
+                        .padding(.horizontal, 32)
+                        .offset(y: -20)
+
+                        // MARK: - TabBar
+                        HStack {
+                            TabButton(title: "Bilgi", icon: "info.circle", index: 0, selectedTab: $selectedTab)
+                            TabButton(title: "Hizmetler", icon: "list.bullet", index: 1, selectedTab: $selectedTab)
+                            TabButton(title: "Personel", icon: "person.3", index: 2, selectedTab: $selectedTab)
+                            TabButton(title: "Yorumlar", icon: "message", index: 3, selectedTab: $selectedTab)
+                        }
+                        .padding(.vertical, 10)
+                        .background(Color(.systemGray6))
+
+                        Divider()
+
+                        // MARK: - İçerik
+                        Group {
+                            if selectedTab == 0 {
+                                if let firma = viewModel.firmaBilgi {
+                                    VStack(alignment: .leading, spacing: 12) {
+                                        HStack(alignment: .top) {
+                                            Image(systemName: "info.circle")
+                                                .foregroundColor(.blue)
+                                            Text(firma.description)
+                                                .font(.body)
+                                        }
+                                        HStack {
+                                            Image(systemName: "mappin.and.ellipse")
+                                                .foregroundColor(.red)
+                                            Text(firma.address)
+                                                .font(.body)
+                                        }
+                                    }
+                                    .padding()
+                                    .frame(maxWidth: .infinity, alignment: .leading)
+                                    .background(Color.white)
+                                    .cornerRadius(10)
+                                    .shadow(radius: 1)
+                                    .padding(.horizontal)
+                                } else {
+                                    ProgressView().padding()
+                                }
+                            }
+                            else if selectedTab == 1 {
+                                VStack(spacing: 8) {
+                                    ForEach(viewModel.hizmetler, id: \.self) { hizmet in
+                                        HStack {
+                                            Image(systemName: company.icon) // sembol değişebilir
+                                            Text(hizmet)
+                                                .font(.body)
+                                            Spacer()
+                                        }
+                                        .padding()
+                                        .background(Color.white)
+                                        .cornerRadius(10)
+                                        .shadow(radius: 1)
+                                        .padding(.horizontal)
+                                    }
+                                }
+                            }
+
+                            else if selectedTab == 2 {
+                                VStack(spacing: 8) {
+                                    ForEach(viewModel.personeller, id: \.self) { person in
+                                        HStack {
+                                            Image(systemName: "person.fill")
+                                            Text(person)
+                                                .font(.body)
+                                            Spacer()
+                                        }
+                                        .padding()
+                                        .background(Color(.systemGray6))
+                                        .cornerRadius(10)
+                                        .padding(.horizontal)
+                                    }
+                                }
+                            }
+
+                            
+                            else if selectedTab == 3 {
+                                VStack(alignment: .leading, spacing: 16) {
+                                    ForEach(viewModel.yorumlar, id: \.self) { yorum in
+                                        HStack(alignment: .top) {
+                                            Image(systemName: "quote.bubble")
+                                                .foregroundColor(.blue)
+                                            Text(yorum)
+                                                .font(.body)
+                                        }
+                                        .padding(.horizontal)
+                                    }
+                                }
+                               
+                            }
+
+                        }
+                        .padding(.top,8)
+
+                        Spacer(minLength: 80) // İçerikle buton arasında boşluk bırak
+                    }
                 }
-                .resizable()
-            
-                .indicator(.progress) // .activity değil, .progress kullanılmalı
-                .scaledToFit()
-                .frame(width: 80, height: 80)
-                .clipShape(Circle())
-            
-            Text(sponsor.name)
-                .font(.title)
-                .bold()
-            
-            StarRatingView(rating: sponsor.rating)
-            
-            Text(String(format: "%.1f", sponsor.rating))
-                .font(.subheadline)
-                .foregroundColor(.gray)
-            
-            Text(sponsor.description)
-                .padding()
-            
-            HStack {
-                Image(systemName: "mappin.circle")
-                Text(sponsor.address)
+                .navigationBarBackButtonHidden(true)
+                .navigationTitle("")
+
+                // MARK: - Sabit Randevu Al Butonu
+                Button(action: {
+                    // Randevu oluşturma işlemi
+                }) {
+                    Text("Randevu Al")
+                        .fontWeight(.bold)
+                        .frame(maxWidth: .infinity)
+                        .padding()
+                        .background(Color("Primary"))
+                        .foregroundColor(.white)
+                        .cornerRadius(12)
+                        .padding(.horizontal)
+                }
+                .padding(.bottom, 8)
             }
-            .foregroundColor(.gray)
-            Map(position: $cameraPosition) {
-                Marker(
-                    sponsor.name,
-                    coordinate: CLLocationCoordinate2D(
-                        latitude: sponsor.latitude,
-                        longitude: sponsor.longitude
-                    )
-                )
+            .onAppear {
+                viewModel.fetchFirmaDetay(firmaId: company.id)
+                viewModel.fetchHizmetler(firmaId: company.id)
+                viewModel.fetchPersoneller(firmaId: company.id)
+                viewModel.fetchYorumlar(firmaId: company.id)
             }
-            .frame(height: 200)
-            .cornerRadius(10)
-            .padding(.vertical)
-            
-            Spacer()
-            
-            Button(action: {
-                // Randevu alma aksiyonu
-            }) {
-                Text("Randevu Al")
-                    .bold()
-                    .frame(maxWidth: .infinity)
-                    .padding()
-                    .background(Color.blue)
-                    .foregroundColor(.white)
-                    .cornerRadius(12)
-            }
-            .padding(.top, 20)
-            
-            Spacer()
         }
-        .padding()
-        .navigationTitle(sponsor.name)
-        .navigationBarTitleDisplayMode(.inline)
+
+    }
+}
+
+// MARK: - Tab Button View
+struct TabButton: View {
+    let title: String
+    let icon: String
+    let index: Int
+    @Binding var selectedTab: Int
+    
+    var body: some View {
+        Button(action: {
+            selectedTab = index
+            print("Seçilen Tab: \(index)")
+
+        }) {
+            VStack {
+                Image(systemName: icon)
+                Text(title)
+                    .font(.footnote)
+            }
+            .foregroundColor(selectedTab == index ? Color("Secondary") : .gray)
+            .frame(maxWidth: .infinity)
+        }
     }
 }

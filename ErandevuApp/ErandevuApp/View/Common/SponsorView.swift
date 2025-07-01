@@ -3,6 +3,7 @@ import SDWebImageSwiftUI
 import CoreLocation
 
 struct SponsorView: View {
+    @EnvironmentObject var appState: AppState
     @State private var companies: [FeaturedCompany] = []
     @State private var selectedDistance = 5 // km cinsinden
     @State private var isLoading = false
@@ -10,17 +11,17 @@ struct SponsorView: View {
     
     
     var userLatitude: Double
-     var userLongitude: Double
-
+    var userLongitude: Double
+    
     let distances = [1, 5, 10, 20, 50]
-
+    
     var body: some View {
         VStack(alignment: .leading, spacing: 16) {
             Text("Yakındaki Firmalar")
                 .font(.title2)
                 .bold()
                 .padding(.horizontal)
-
+            
             Picker("Mesafe", selection: $selectedDistance) {
                 ForEach(distances, id: \.self) { km in
                     Text("\(km) km").tag(km)
@@ -38,41 +39,41 @@ struct SponsorView: View {
                     fetchData(with: coordinate)
                 }
             }
-
-
-
-
-
-
-
-
+            
+            
             if isLoading {
                 ProgressView().padding()
             }
-
+            
             ScrollView(.horizontal, showsIndicators: false) {
                 HStack(spacing: 16) {
                     ForEach(companies) { company in
-                        let sponsor = Sponsor(from: company)
-                        NavigationLink(destination: SponsorDetailView(sponsor: Sponsor(from: company))) {
+                        Button(action: {
+                            let sponsor = Sponsor(from: company)
+                            appState.path.append(.sponsorDetail(company))
+
+
+
+                        }) {
                             CompanyItemView(company: company)
                         }
-                    }
 
+                    }
+                    
                 }
                 .padding(.horizontal)
             }
         }
-     
-
-
-
+        
+        
+        
+        
     }
-
+    
     func fetchData(with coordinate: CLLocationCoordinate2D) {
         isLoading = true
-
-        FirmaService.shared.fetchNearbyCompanies(
+        
+        FirmaService.fetchNearbyCompanies(
             latitude: coordinate.latitude,
             longitude: coordinate.longitude,
             distance: selectedDistance
@@ -88,14 +89,14 @@ struct SponsorView: View {
             }
         }
     }
-
-
-
+    
+    
+    
 }
 
 struct CompanyItemView: View {
     let company: FeaturedCompany
-
+    
     var body: some View {
         VStack(spacing: 8) {
             // Firma logosu
@@ -106,20 +107,20 @@ struct CompanyItemView: View {
                 .frame(width: 50, height: 50)
                 .clipShape(Circle())
                 .shadow(radius: 2)
-
+            
             // Firma adı
             Text(company.company_name)
                 .font(.footnote)
                 .fontWeight(.semibold)
                 .multilineTextAlignment(.center)
                 .lineLimit(1)
-
+            
             // Sektör adı (örnek, sabit yazıldı; istersen veriden al)
             Text("Sektör: \(company.sektor_name ?? "Bilinmiyor")")
                 .font(.caption2)
                 .foregroundColor(.gray)
                 .lineLimit(1)
-
+            
             // Randevu Al butonu
             Button(action: {
                 // Navigation yapılabilir

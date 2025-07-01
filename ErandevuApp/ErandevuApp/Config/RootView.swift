@@ -3,13 +3,20 @@ import SwiftUI
 struct RootView: View {
     
     @EnvironmentObject var appState: AppState
+    @Binding var selectedTab: Int
     
+
     var body: some View {
         NavigationStack(path: $appState.path) {
             // Başlangıç görünümü her zaman ContentView
             ContentView()
                 .navigationDestination(for: AppRoute.self) { route in
                     switch route {
+                    case .sponsorDetail(let company):
+                           CompanyProfileView(company: company, selectedTab: $selectedTab)
+
+                    case .sectorDetail(let sector):
+                        SectorDetailView(sector: sector)
                     case .home:
                         ContentView()
 

@@ -12,6 +12,8 @@ enum AppRoute: Hashable {
     case slotList
     case randevu
     case firmaAccount
+    case sectorDetail(Sector)
+    case sponsorDetail(FeaturedCompany)
 }
 
 enum UserType: String, Hashable {

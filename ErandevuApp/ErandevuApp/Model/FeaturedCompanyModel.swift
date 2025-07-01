@@ -1,5 +1,5 @@
-struct FeaturedCompany: Codable, Identifiable {
-    let id: String
+struct FeaturedCompany: Codable, Identifiable, Hashable {
+    let id: Int
     let rating: Double
     let address: String
     let latitude: Double
@@ -8,9 +8,10 @@ struct FeaturedCompany: Codable, Identifiable {
     let description: String
     let sektor_name: String
     let company_name: String
+    let icon: String
     let logo_url: String
     
-    
+
 }
 
 

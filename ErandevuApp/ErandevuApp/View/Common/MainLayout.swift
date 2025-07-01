@@ -38,7 +38,6 @@ struct MainLayout<Content: View>: View {
                 .animation(.easeInOut(duration: 0.3), value: showMenu)
                 .zIndex(2) // Menü her zaman en üstte olacak
         }
-
         .animation(.easeInOut, value: showMenu)
         .gesture(
             DragGesture()

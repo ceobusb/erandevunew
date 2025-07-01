@@ -2,8 +2,8 @@ import SwiftUI
 
 import Foundation
 
-struct Sector: Identifiable, Codable, Hashable {
-    let id: String
+struct Sector: Codable, Identifiable, Hashable {
+    let id: Int
     let title: String
     let description: String
     let icon: String

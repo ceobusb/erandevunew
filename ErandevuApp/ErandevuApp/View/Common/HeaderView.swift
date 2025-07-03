@@ -79,7 +79,7 @@ struct HeaderView: View {
                 HStack(spacing: 20) {
                     Button {
                         appState.path = []
-                        appState.path.append(.login)
+                        appState.path.append(.login(redirectAfter: .randevu))
                     } label: {
                         Image(systemName: "person.fill")
                             .font(.system(size: 18))

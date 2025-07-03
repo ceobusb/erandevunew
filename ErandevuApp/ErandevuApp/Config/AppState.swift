@@ -14,9 +14,10 @@ class AppState: ObservableObject {
     @Published var path: [AppRoute] = []
     @Published var userType: UserType?
     @Published var userEmail: String? = nil
-    
     @Published var role: Int? = nil
     @Published var locationManager = LocationManager()
+    @Published var redirectToRoute: AppRoute? = nil
+
 
 
     // ✅ Giriş tamamlandığında ContentView'den Account'a geçiş

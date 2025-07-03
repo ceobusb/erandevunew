@@ -68,7 +68,7 @@ struct EmailVerificationView: View {
                         appState.isLoggedIn = false // login henüz yapılmadı
                         
                         appState.path = []
-                        appState.path.append(.login)
+                        appState.path.append(.login(redirectAfter: .randevu))
                       
                         onAlertDismissed = false
                     }

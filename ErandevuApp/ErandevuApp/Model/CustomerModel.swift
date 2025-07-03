@@ -14,9 +14,9 @@ struct CustomerModel: Codable {
     let status: Int
     let created_at: String?
     let email: String?
-    let business_phone: String
-    let mobile_phone: String
-    let working_hours: String
+    let business_phone: String?    // <- düzeltilmiş
+       let mobile_phone: String?      // <- düzeltilmiş
+       let working_hours: String?     // <- düzeltilmiş
 }
 
 struct APIResponseCustomer: Codable {

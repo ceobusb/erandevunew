@@ -38,6 +38,10 @@ struct Endpoints {
         static let detail = "\(baseURL)/customer/detail"
         static let register = "\(baseURL)/create_customer"
         static let login = "\(baseURL)/customer_login"
+        static let createrandevu = "\(baseURL)/create_randevu"
+        static let randevular = "\(baseURL)/get_customer_randevular"
+        static let updateStatus = "\(baseURL)/update_customer_status_post"
+        static let updateStatusTamamla = "\(baseURL)/update_customer_status_post_ok"
     }
     
 

@@ -6,6 +6,8 @@ struct CompanyProfileView: View {
     @StateObject private var viewModel = CompanyProfileViewModel()
     @Binding var selectedTab: Int
     @State private var showMenu = false
+    @EnvironmentObject var appState: AppState
+
     @Environment(\.presentationMode) var presentationMode
 
     var body: some View {
@@ -23,11 +25,11 @@ struct CompanyProfileView: View {
                                    .resizable()
                                    .indicator(.activity)
                                    .scaledToFill()
-                                   .frame(height: 140)
+                                   .frame(height: 250)
                                    .frame(maxWidth: .infinity)
                                    .clipped() // !!! Taşmayı engeller
                         }
-                        .frame(height: 180)
+                        .frame(height: 250)
                         .frame(maxWidth: .infinity)
 
                         // MARK: - Firma Adı ve Puan
@@ -60,11 +62,12 @@ struct CompanyProfileView: View {
                         Group {
                             if selectedTab == 0 {
                                 if let firma = viewModel.firmaBilgi {
+                                    Text("Firma Bilgileri")
+                                        .font(.headline)
+                                        .padding(.horizontal)
+                                        .padding(.top)
                                     VStack(alignment: .leading, spacing: 12) {
-                                        Text("Firma Bilgileri")
-                                            .font(.headline)
-                                            .padding(.horizontal)
-                                            .padding(.top)
+                                       
                                         HStack(alignment: .top) {
                                             Image(systemName: "info.circle")
                                                 .foregroundColor(.blue)
@@ -170,12 +173,13 @@ struct CompanyProfileView: View {
                             }
 
                             else if selectedTab == 3 {
+                                Text("Kullanıcı Yorumları")
+                                    .font(.headline)
+                                    .padding(.horizontal)
+                                    .padding(.top)
                                 ScrollView {
                                     VStack(alignment: .leading, spacing: 12) {
-                                        Text("Kullanıcı Yorumları")
-                                            .font(.headline)
-                                            .padding(.horizontal)
-                                            .padding(.top)
+                                      
 
                                         ForEach(viewModel.yorumlar, id: \.self) { yorum in
                                             HStack(alignment: .top, spacing: 10) {
@@ -213,7 +217,12 @@ struct CompanyProfileView: View {
 
                 // MARK: - Sabit Randevu Al Butonu
                 Button(action: {
-                    // Randevu oluşturma işlemi
+                    if appState.isLoggedIn {
+                         appState.redirectToRoute = .randevuAl(firmaID: company.id)
+                            
+                     } else {
+                         appState.redirectToRoute = .login(redirectAfter: .randevuAl(firmaID: company.id))
+                     }
                 }) {
                     Text("Randevu Al")
                         .fontWeight(.bold)

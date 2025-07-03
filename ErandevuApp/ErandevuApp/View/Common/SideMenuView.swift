@@ -28,15 +28,13 @@ struct SideMenuView: View {
                     showMenu = false
                 }
 
-                menuButton("Randevu Oluştur", systemImage: "calendar.badge.plus") {
-                    appState.path = []
-                    appState.path.append(appState.isLoggedIn ? .randevu : .login)
-                    showMenu = false
-                }
+             
 
                 if !appState.isLoggedIn {
+                    
+                  
                     menuButton("Giriş Yap", systemImage: "person.fill") {
-                        appState.path = [.login]
+                        appState.path.append(.login(redirectAfter: .randevu))
                         showMenu = false
                     }
 
@@ -46,6 +44,11 @@ struct SideMenuView: View {
                     }
 
                 } else {
+                    menuButton("Randevularım", systemImage: "calendar.badge.plus") {
+                        appState.path = []
+                        appState.path = [.randevularimcustomer]
+                        showMenu = false
+                    }
                     // Rol tabanlı menüler
                     if appState.role == 1 {
                         menuButton("Firma Profili", systemImage: "building.2") {

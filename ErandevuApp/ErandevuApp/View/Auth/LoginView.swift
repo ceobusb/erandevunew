@@ -6,6 +6,7 @@ struct LoginView: View {
         case musteri = "Müşteri Girişi"
     }
     
+    var redirectAfter: AppRoute? = nil 
     @State private var selectedLoginType: LoginType = .firma
     @EnvironmentObject var appState: AppState
     @StateObject private var viewModel = LoginViewModel()

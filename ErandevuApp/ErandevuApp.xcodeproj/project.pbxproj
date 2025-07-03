@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		28C6266E2E0AD837007D1AC8 /* SDWebImageSwiftUI in Frameworks */ = {isa = PBXBuildFile; productRef = 28C6266D2E0AD837007D1AC8 /* SDWebImageSwiftUI */; };
+		5FA1CECF2E172D4C00AD47D5 /* SDWebImageSwiftUI in Frameworks */ = {isa = PBXBuildFile; productRef = 5FA1CECE2E172D4C00AD47D5 /* SDWebImageSwiftUI */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -69,7 +69,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				28C6266E2E0AD837007D1AC8 /* SDWebImageSwiftUI in Frameworks */,
+				5FA1CECF2E172D4C00AD47D5 /* SDWebImageSwiftUI in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -130,7 +130,7 @@
 			);
 			name = ErandevuApp;
 			packageProductDependencies = (
-				28C6266D2E0AD837007D1AC8 /* SDWebImageSwiftUI */,
+				5FA1CECE2E172D4C00AD47D5 /* SDWebImageSwiftUI */,
 			);
 			productName = ErandevuApp;
 			productReference = 5F5E50762E07173200EACE41 /* ErandevuApp.app */;
@@ -216,8 +216,8 @@
 			mainGroup = 5F5E506D2E07173200EACE41;
 			minimizedProjectReferenceProxies = 1;
 			packageReferences = (
-				28C6266C2E0AD80B007D1AC8 /* XCRemoteSwiftPackageReference "SDWebImageSwiftUI" */,
-				5FA1CE352E14757700AD47D5 /* XCLocalSwiftPackageReference "../../../erandevu/NavigationStyler" */,
+				5FA1CECD2E172D1100AD47D5 /* XCRemoteSwiftPackageReference "SDWebImageSwiftUI" */,
+				5F1FAE9D2E172E64003D5BD1 /* XCLocalSwiftPackageReference "../../../erandevu/NavigationStyler" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 5F5E50772E07173200EACE41 /* Products */;
@@ -619,14 +619,14 @@
 /* End XCConfigurationList section */
 
 /* Begin XCLocalSwiftPackageReference section */
-		5FA1CE352E14757700AD47D5 /* XCLocalSwiftPackageReference "../../../erandevu/NavigationStyler" */ = {
+		5F1FAE9D2E172E64003D5BD1 /* XCLocalSwiftPackageReference "../../../erandevu/NavigationStyler" */ = {
 			isa = XCLocalSwiftPackageReference;
 			relativePath = ../../../erandevu/NavigationStyler;
 		};
 /* End XCLocalSwiftPackageReference section */
 
 /* Begin XCRemoteSwiftPackageReference section */
-		28C6266C2E0AD80B007D1AC8 /* XCRemoteSwiftPackageReference "SDWebImageSwiftUI" */ = {
+		5FA1CECD2E172D1100AD47D5 /* XCRemoteSwiftPackageReference "SDWebImageSwiftUI" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/SDWebImage/SDWebImageSwiftUI";
 			requirement = {
@@ -637,9 +637,9 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		28C6266D2E0AD837007D1AC8 /* SDWebImageSwiftUI */ = {
+		5FA1CECE2E172D4C00AD47D5 /* SDWebImageSwiftUI */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 28C6266C2E0AD80B007D1AC8 /* XCRemoteSwiftPackageReference "SDWebImageSwiftUI" */;
+			package = 5FA1CECD2E172D1100AD47D5 /* XCRemoteSwiftPackageReference "SDWebImageSwiftUI" */;
 			productName = SDWebImageSwiftUI;
 		};
 /* End XCSwiftPackageProductDependency section */

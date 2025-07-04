@@ -57,42 +57,42 @@ struct AccountView: View {
                             }
                             
                             // BUTONLAR
-                            VStack(spacing: 12) {
-                                Button {
-                                    showEditProfile = true
-                                } label: {
-                                    Label("Profili Düzenle", systemImage: "square.and.pencil")
-                                        .frame(maxWidth: .infinity)
-                                        .padding()
-                                        .background(Color.blue)
-                                        .foregroundColor(.white)
-                                        .cornerRadius(10)
-                                }
-                                
-                                Button {
-                                    showAddSlot = true
-                                } label: {
-                                    Label("Randevu Saatleri Ekle", systemImage: "calendar.badge.plus")
-                                        .frame(maxWidth: .infinity)
-                                        .padding()
-                                        .background(Color.green)
-                                        .foregroundColor(.white)
-                                        .cornerRadius(10)
-                                }
-                                
-                                Button {
-                           
-                                    appState.path = []
-                                    appState.path.append(.slotList)
-                                } label: {
-                                    Label("Randevu Saatlerini Gör", systemImage: "clock")
-                                        .frame(maxWidth: .infinity)
-                                        .padding()
-                                        .background(Color.orange)
-                                        .foregroundColor(.white)
-                                        .cornerRadius(10)
-                                }
-                            }
+//                            VStack(spacing: 12) {
+//                                Button {
+//                                    showEditProfile = true
+//                                } label: {
+//                                    Label("Profili Düzenle", systemImage: "square.and.pencil")
+//                                        .frame(maxWidth: .infinity)
+//                                        .padding()
+//                                        .background(Color.blue)
+//                                        .foregroundColor(.white)
+//                                        .cornerRadius(10)
+//                                }
+//                                
+//                                Button {
+//                                    showAddSlot = true
+//                                } label: {
+//                                    Label("Randevu Saatleri Ekle", systemImage: "calendar.badge.plus")
+//                                        .frame(maxWidth: .infinity)
+//                                        .padding()
+//                                        .background(Color.green)
+//                                        .foregroundColor(.white)
+//                                        .cornerRadius(10)
+//                                }
+//                                
+//                                Button {
+//                           
+//                                    appState.path = []
+//                                    appState.path.append(.slotList)
+//                                } label: {
+//                                    Label("Randevu Saatlerini Gör", systemImage: "clock")
+//                                        .frame(maxWidth: .infinity)
+//                                        .padding()
+//                                        .background(Color.orange)
+//                                        .foregroundColor(.white)
+//                                        .cornerRadius(10)
+//                                }
+//                            }
                         }
                         .padding()
                     }

@@ -52,8 +52,6 @@ struct SponsorView: View {
                             let sponsor = Sponsor(from: company)
                             appState.path.append(.sponsorDetail(company))
 
-
-
                         }) {
                             CompanyItemView(company: company)
                         }

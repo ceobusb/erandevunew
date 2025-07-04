@@ -90,7 +90,6 @@ class RandevuService {
         request.httpBody = postString.data(using: .utf8)
         URLSession.shared.dataTask(with: request) { data, response, error in
             guard let data = data else {
-                print("Gelen response: \(data)")
                 completion(.failure(error ?? NSError(domain: "", code: -2, userInfo: [NSLocalizedDescriptionKey: "Sunucu hatası"])))
                 return
             }
@@ -162,6 +161,123 @@ class RandevuService {
         }.resume()
     }
     
+    func getRandevularFirma(firmaID: Int, page: Int, completion: @escaping (Result<[FirmaRandevuModel], Error>) -> Void) {
+        
+        
+        let urlString = "\(Endpoints.Firma.randevular)?firmaId=\(firmaID)&limit=10&offset=\(page * 10)"
+        
+        
+        guard let url = URL(string: urlString) else {
+            completion(.success([]))
+            return
+        }
+        
+        var request = URLRequest(url: url)
+        
+        request.httpMethod = "POST"
+        request.setValue("application/x-www-form-urlencoded", forHTTPHeaderField: "Content-Type")
+        request.setValue(Endpoints.apikey, forHTTPHeaderField: "X-Api-Key")
+        
+        let postString = "firmaId=\(firmaID)"
+        request.httpBody = postString.data(using: .utf8)
+        
+        URLSession.shared.dataTask(with: request) { data, response, error in
+            if let data = data {
+                print("API RESPONSE: \(String(data: data, encoding: .utf8) ?? "Boş veri")")
+            }
+            
+            guard let data = data,
+                  let decoded = try? JSONDecoder().decode(FirmaRandevuResponse.self, from: data),
+                  decoded.status else {
+                print("Decode başarısız veya status false")
+                completion(.success([])) // ya da .failure(...) verebilirsin
+                return
+            }
+            
+            completion(.success(decoded.data))
+            
+        }.resume()
+        
+    }
+    
+    func updateRandevuStatusFirma(FirmaId: Int, id: Int, status: Int, completion: @escaping (Result<String, Error>) -> Void) {
+        guard let url = URL(string: Endpoints.Firma.randevuupdateStatus) else {
+            completion(.failure(NSError(domain: "", code: -1, userInfo: [NSLocalizedDescriptionKey: "URL geçersiz"])))
+            return
+        }
+
+        var request = URLRequest(url: url)
+        request.httpMethod = "POST"
+        request.setValue("application/x-www-form-urlencoded", forHTTPHeaderField: "Content-Type")
+        request.setValue(Endpoints.apikey, forHTTPHeaderField: "X-Api-Key")
+
+        let postString = "id=\(id)&status=\(status)&firmaId=\(FirmaId)"
+        request.httpBody = postString.data(using: .utf8)
+        URLSession.shared.dataTask(with: request) { data, response, error in
+            guard let data = data else {
+            
+                completion(.failure(error ?? NSError(domain: "", code: -2, userInfo: [NSLocalizedDescriptionKey: "Sunucu hatası"])))
+                return
+            }
+
+            // 🔍 GÖNDERİLEN VERİYİ GÖR
+            if let raw = String(data: data, encoding: .utf8) {
+                print("🔁 Gelen response:\n\(raw)")
+            }
+            
+            do {
+                let decoded = try JSONDecoder().decode(UpdateRandevuResponse.self, from: data)
+                if decoded.status {
+                    completion(.success(decoded.message))
+                } else {
+                    completion(.failure(NSError(domain: "", code: -3, userInfo: [NSLocalizedDescriptionKey: decoded.message])))
+                }
+            } catch {
+                completion(.failure(error))
+            }
+        }.resume()
+    }
+    
+    
+    
+    static func updateFirmaRandevuStatus(FirmaID: Int,randevuID: Int, newStatus: Int, reason: String, completion: @escaping (Result<String, Error>) -> Void) {
+        guard let url = URL(string: Endpoints.Firma.randevuupdateStatus) else {
+            completion(.failure(NSError(domain: "", code: -1, userInfo: [NSLocalizedDescriptionKey: "URL geçersiz"])))
+            return
+        }
+        
+        var request = URLRequest(url: url)
+        request.httpMethod = "POST"
+        
+        request.setValue("application/x-www-form-urlencoded", forHTTPHeaderField: "Content-Type")
+        request.setValue(Endpoints.apikey, forHTTPHeaderField: "X-Api-Key")
+        
+        let postString = "id=\(randevuID)&firmaId=\(FirmaID)&status=\(newStatus)&reason=\(reason)"
+        request.httpBody = postString.data(using: .utf8)
+        URLSession.shared.dataTask(with: request) { data, response, error in
+            guard let data = data else {
+                completion(.failure(error ?? NSError(domain: "", code: -2, userInfo: [NSLocalizedDescriptionKey: "Sunucu hatası"])))
+                return
+            }
+
+            // 🔍 GÖNDERİLEN VERİYİ GÖR
+            if let raw = String(data: data, encoding: .utf8) {
+                print("🔁 Gelen response:\n\(raw)")
+            }
+            
+            do {
+                let decoded = try JSONDecoder().decode(UpdateRandevuResponse.self, from: data)
+                if decoded.status {
+                    completion(.success(decoded.message))
+                } else {
+                    completion(.failure(NSError(domain: "", code: -3, userInfo: [NSLocalizedDescriptionKey: decoded.message])))
+                }
+            } catch {
+                completion(.failure(error))
+            }
+        }.resume()
+    }
+
     
     
     

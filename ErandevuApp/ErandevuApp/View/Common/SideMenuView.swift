@@ -46,7 +46,15 @@ struct SideMenuView: View {
                 } else {
                     menuButton("Randevularım", systemImage: "calendar.badge.plus") {
                         appState.path = []
-                        appState.path = [.randevularimcustomer]
+
+                        if appState.role == 1 {
+                            // Firma için
+                            appState.path = [.firmaRandevular]
+                        } else {
+                            // Müşteri için
+                            appState.path = [.randevularimcustomer]
+                        }
+
                         showMenu = false
                     }
                     // Rol tabanlı menüler

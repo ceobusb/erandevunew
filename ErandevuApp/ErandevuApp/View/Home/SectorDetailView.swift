@@ -109,6 +109,8 @@ struct SectorDetailView: View {
     
     
     struct CompanyItemViewSector: View {
+        @EnvironmentObject var appState: AppState
+
         let company: FeaturedCompany
         
         var body: some View {
@@ -146,9 +148,11 @@ struct SectorDetailView: View {
                 }
                 
                 Button(action: {
-                    // Randevu alma işlemi
+                    let sponsor = Sponsor(from: company)
+                    appState.path.append(.sponsorDetail(company))
+
                 }) {
-                    Text("Randevu Al")
+                    Text("Firmayı İncele")
                         .fontWeight(.medium)
                         .foregroundColor(.white)
                         .padding(.horizontal, 24)

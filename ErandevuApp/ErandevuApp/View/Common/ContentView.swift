@@ -1,10 +1,14 @@
 import SwiftUI
-
+import MapKit
 struct ContentView: View {
     @EnvironmentObject var appState: AppState
     @State private var currentIndex = 0
     @State private var showMenu: Bool = false
     @StateObject var locationManager = LocationManager()
+    @State private var companies: [FeaturedCompany] = []
+    @State private var sectors: [Sector] = []
+
+    @State private var selectedDistance = 5 // km cinsinden
 
     
     let features = [
@@ -18,8 +22,6 @@ struct ContentView: View {
         MainLayout(showMenu: $showMenu) {
             ZStack(alignment: .leading) {
                 VStack(spacing: 0) {
-               
-                    
                     ScrollView {
                         VStack(spacing: 24) {
                             // Bilgilendirici Kaydırmalı Alan
@@ -74,6 +76,35 @@ struct ContentView: View {
                         }
                         .padding(.bottom, 40)
                     }
+                    .refreshable {
+                        print("Sayfa yenileniyor...")
+
+                        let coordinate = CLLocationCoordinate2D(latitude: appState.currentLatitude, longitude: appState.currentLongitude)
+
+                        // Firma listesi yenileniyor
+                        FirmaService.fetchNearbyCompanies(
+                            latitude: coordinate.latitude,
+                            longitude: coordinate.longitude,
+                            distance: selectedDistance
+                        ) { result in
+                            DispatchQueue.main.async {
+                                switch result {
+                                case .success(let data):
+                                    self.companies = data
+                                case .failure(let err):
+                                    print("Sponsor firma yenileme hatası:", err.localizedDescription)
+                                }
+                            }
+                        }
+
+                        // Sektör listesi yenileniyor
+                        SectorService.fetchSectors { result in
+                            DispatchQueue.main.async {
+                                self.sectors = result
+                            }
+                        }
+                    }
+
                     
                 }
                 

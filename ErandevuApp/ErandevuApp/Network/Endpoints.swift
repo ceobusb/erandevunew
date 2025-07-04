@@ -21,15 +21,17 @@ struct Endpoints {
         static let verifyCode = "\(baseURL)/confirm_firma_kod"
         static let resend_firma_kod = "\(baseURL)/resend_firma_kod"
         static let login = "\(baseURL)/firma_login"
-        
+ 
         static let featuredCompanies = "\(baseURL)/get_featured_companies"
         static let nearbyCompanies = "\(baseURL)/nearby_companies_get"
         static let detail = "\(baseURL)/firmadetails"
+        static let randevular = "\(baseURL)/get_firma_randevular"
         
         
         static let services = "\(baseURL)/get_firma_services"
         static let personeller = "\(baseURL)/get_firma_personeller"
         static let yorumlar = "\(baseURL)/get_firma_comments"
+        static let randevuupdateStatus = "\(baseURL)/update_firma_status_post"
     }
 
 

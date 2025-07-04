@@ -7,6 +7,7 @@ indirect enum AppRoute: Hashable {
     case login(redirectAfter: AppRoute)
     case register
     case randevularimcustomer
+    case firmaRandevular
     case emailVerification
     case account               // Firma profili
     case customerAccount       // Müşteri profili

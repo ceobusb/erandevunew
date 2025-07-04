@@ -71,6 +71,13 @@ struct RootView: View {
                             LoginView(redirectAfter: .customerAccount)
                         }
                         
+                    case .firmaRandevular:
+                        if appState.isLoggedIn, let company = appState.company {
+                            RandevuListFirma(company: company)
+                        } else {
+                            LoginView(redirectAfter: .customerAccount)
+                        }
+                        
                         
                         
                     case .firmaAccount:

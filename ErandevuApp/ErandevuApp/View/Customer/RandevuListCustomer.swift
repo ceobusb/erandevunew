@@ -2,7 +2,6 @@ import SwiftUI
 
 struct RandevuListCustomer: View {
     @StateObject var viewModel: RandevuListCustomerViewModel = RandevuListCustomerViewModel()
-
     @EnvironmentObject var appState: AppState
     let customer: CustomerModel
 
@@ -25,24 +24,34 @@ struct RandevuListCustomer: View {
     var body: some View {
         NavigationView {
             ScrollView {
-                LazyVStack(spacing: 16) {
-                    ForEach(viewModel.randevular) { randevu in
-                        randevuCardView(for: randevu)
-                            .onAppear {
-                                if randevu == viewModel.randevular.last && !viewModel.isLoading && !viewModel.isLastPage {
-                                      viewModel.page += 1
-                                      viewModel.fetchRandevular(for: customer, page: viewModel.page)
-                                  }
-                            }
+                if viewModel.randevular.isEmpty && !viewModel.isLoading {
+                    EmptyStateView(
+                        title: "Henüz Randevunuz Yok",
+                        message: "Yeni bir randevu oluşturmak için firmaları inceleyin",
+                        systemImage: "calendar.badge.exclamationmark"
+                    )
+                } else {
+                    LazyVStack(spacing: 16) {
+                        ForEach(viewModel.randevular) { randevu in
+                            randevuCardView(for: randevu)
+                                .onAppear {
+                                    if randevu == viewModel.randevular.last && !viewModel.isLoading && !viewModel.isLastPage {
+                                          viewModel.page += 1
+                                          viewModel.fetchRandevular(for: customer, page: viewModel.page)
+                                      }
+                                }
+                        }
+                        
+                        if isLoading {
+                            ProgressView().padding()
+                        }
                     }
-                    
-                    if isLoading {
-                        ProgressView().padding()
-                    }
+                    .padding(.top)
                 }
-                .padding(.top)
+
+            
             }
-            .navigationTitle("Randevularım")
+          
             .onAppear {
                 if viewModel.randevular.isEmpty {
                     viewModel.fetchRandevular(for: customer, page: 1)
@@ -101,7 +110,7 @@ struct RandevuListCustomer: View {
                     selectedRandevuToComplete = randevu
                     showCompleteSheet = true
                 }) {
-                    Text("Randevu Tamamlandı")
+                    Text("Randevu Tamamla")
                         .foregroundColor(.blue)
                         .padding(6)
                         .overlay(
@@ -213,7 +222,34 @@ struct RandevuListCustomer: View {
         }
         
     }
-    
+    struct EmptyStateView: View {
+        let title: String
+        let message: String
+        let systemImage: String
+
+        var body: some View {
+            VStack(spacing: 16) {
+                Image(systemName: systemImage)
+                    .resizable()
+                    .scaledToFit()
+                    .frame(width: 80, height: 80)
+                    .foregroundColor(.orange.opacity(0.8))
+
+                Text(title)
+                    .font(.title3)
+                    .bold()
+
+                Text(message)
+                    .font(.body)
+                    .foregroundColor(.secondary)
+                    .multilineTextAlignment(.center)
+                    .padding(.horizontal)
+            }
+            .frame(maxWidth: .infinity, maxHeight: .infinity)
+            .padding()
+        }
+    }
+
     
     // MARK: - Status View
     func statusTextView(for status: Int) -> some View {

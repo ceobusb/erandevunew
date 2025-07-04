@@ -50,8 +50,8 @@ struct CompanyModel: Codable, Identifiable {
     let created_at: String
     let sektor_name: String
     let business_phone: String?
-      let mobile_phone: String?
-      let working_hours: String?
+    let mobile_phone: String?
+    let working_hours: String?
 
     enum CodingKeys: String, CodingKey {
         case id

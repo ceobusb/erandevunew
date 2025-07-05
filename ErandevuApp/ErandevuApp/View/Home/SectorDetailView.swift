@@ -141,11 +141,12 @@ struct SectorDetailView: View {
                     .font(.subheadline)
                     .foregroundColor(.secondary)
                 
-                if company.distance > 0 {
-                    Text(String(format: "%.1f km uzakta", company.distance))
+                if let distance = company.distance, distance > 0 {
+                    Text(String(format: "%.1f km uzakta", distance))
                         .font(.caption)
                         .foregroundColor(.gray)
                 }
+
                 
                 Button(action: {
                     let sponsor = Sponsor(from: company)

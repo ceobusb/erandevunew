@@ -149,18 +149,18 @@ class FirmaService {
             
             
             
+     
+            
             guard let data = data else {
-                completion(.failure(NSError(domain: "", code: -2, userInfo: [NSLocalizedDescriptionKey: "Veri alınamadı"])))
+                completion(.failure(NSError(domain: "", code: -1, userInfo: [NSLocalizedDescriptionKey: "Veri yok"])))
                 return
             }
-            
-            
-            
-            do {
-                let decoded = try JSONDecoder().decode(FeaturedCompanyResponse.self, from: data)
-                completion(.success(decoded.data))
 
+            do {
+                let decodedResponse = try JSONDecoder().decode(CompanyResponse.self, from: data)
+                completion(.success(decodedResponse.data))
             } catch {
+                print("Decode Hatası:", error)
                 completion(.failure(error))
             }
         }.resume()
@@ -278,6 +278,12 @@ struct APIResponse<T: Codable>: Codable {
 
 
 struct FeaturedCompanyResponse: Codable {
+    let status: Bool
+    let message: String
+    let data: [FeaturedCompany]
+}
+
+struct CompanyResponse: Codable {
     let status: Bool
     let message: String
     let data: [FeaturedCompany]

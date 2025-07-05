@@ -62,16 +62,23 @@ struct HeaderView: View {
                         Button {
                             withAnimation {
                                 isLoggingOut = true
-                            }
-                            DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
-                                appState.logout()
-                                isLoggingOut = false
+                                DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
+                                    logoutUser()
+                                }
                             }
                         } label: {
-                            Image(systemName: "rectangle.portrait.and.arrow.right.fill")
-                                .font(.system(size: 20))
-                                .foregroundColor(Color(.black))
+                            if isLoggingOut {
+                                ProgressView("Çıkış yapılıyor...")
+                                    .progressViewStyle(CircularProgressViewStyle())
+                                    .frame(maxWidth: .infinity)
+                            } else {
+                                Image(systemName: "rectangle.portrait.and.arrow.right.fill")
+                                    .font(.system(size: 20))
+                                    .foregroundColor(.black)
+                            }
                         }
+
+
                     }
                 }
             } else {
@@ -102,4 +109,44 @@ struct HeaderView: View {
         .padding(.vertical, 20)
         .background(Color(.white))
     }
+    
+    func logoutUser() {
+        
+        print("User Type:", appState.userType ?? "nil")
+        print("Token:", UserDefaults.standard.string(forKey: "device_token") ?? "token yok")
+
+        
+        let userId = appState.loginid
+        guard let userType = appState.userType,
+              let deviceToken = UserDefaults.standard.string(forKey: "device_token") else {
+            DispatchQueue.main.async {
+                appState.logout()
+            }
+            return
+        }
+
+
+        let url = URL(string: "https://api.kurumsaleticaretsitesi.com/api/delete_device_token")!
+        var request = URLRequest(url: url)
+        request.httpMethod = "POST"
+        request.setValue("application/x-www-form-urlencoded", forHTTPHeaderField: "Content-Type")
+        request.setValue(Endpoints.apikey, forHTTPHeaderField: "X-Api-Key")
+
+        let postString = "user_id=\(userId)&user_type=\(userType)&device_token=\(deviceToken)"
+        request.httpBody = postString.data(using: .utf8)
+
+        URLSession.shared.dataTask(with: request) { data, response, error in
+            DispatchQueue.main.async {
+                isLoggingOut = false
+                if let error = error {
+                    print("Logout token silme hatası: \(error.localizedDescription)")
+                } else {
+                    print("Token silindi.")
+                }
+                appState.logout()
+            }
+        }.resume()
+    }
+
+
 }

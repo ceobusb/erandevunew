@@ -4,6 +4,7 @@ class AppState: ObservableObject {
     @Published var isLoggedIn: Bool = false
     @Published var isEmailVerified: Bool = false
     @Published var FirmaId: Int = 0
+    @Published var loginid: Int = 0
     @Published var showMenu: Bool = false
     @Published var FirmaAdi: String = ""
     @Published var company: CompanyModel? = nil
@@ -94,6 +95,7 @@ class AppState: ObservableObject {
         userEmail = nil
         showMenu = false
         FirmaId = 0
+        loginid=0
         role = nil
         FirmaAdi = ""
         company = nil

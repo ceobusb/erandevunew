@@ -5,15 +5,34 @@ import CoreLocation
 struct SponsorView: View {
     @EnvironmentObject var appState: AppState
     @State private var companies: [FeaturedCompany] = []
-    @State private var selectedDistance = 5 // km cinsinden
+    @State private var selectedDistance: DistanceFilter = .km(5)
+
     @State private var isLoading = false
     @ObservedObject var locationManager: LocationManager
     
-    
+    enum DistanceFilter: Equatable, Hashable {
+        case km(Int)
+        case all
+        
+        var value: Int? {
+            switch self {
+            case .km(let km): return km
+            case .all: return nil
+            }
+        }
+
+        var label: String {
+            switch self {
+            case .km(let km): return "\(km) km"
+            case .all: return "TÜMÜ"
+            }
+        }
+    }
+
     var userLatitude: Double
     var userLongitude: Double
-    
-    let distances = [1, 5, 10, 20, 50]
+    let distances: [DistanceFilter] = [.km(1), .km(5), .km(10), .km(20), .all]
+
     
     var body: some View {
         VStack(alignment: .leading, spacing: 16) {
@@ -23,17 +42,19 @@ struct SponsorView: View {
                 .padding(.horizontal)
             
             Picker("Mesafe", selection: $selectedDistance) {
-                ForEach(distances, id: \.self) { km in
-                    Text("\(km) km").tag(km)
+                ForEach(distances, id: \.self) { item in
+                    Text(item.label).tag(item)
                 }
             }
             .pickerStyle(SegmentedPickerStyle())
+
             .padding(.horizontal)
-            .onReceive(locationManager.$locationFetched) { fetched in
-                if fetched, let coordinate = locationManager.location {
+            .onChange(of: selectedDistance) { _ in
+                if let coordinate = locationManager.location {
                     fetchData(with: coordinate)
                 }
             }
+
             .onChange(of: selectedDistance) { _ in
                 if let coordinate = locationManager.location {
                     fetchData(with: coordinate)
@@ -74,7 +95,8 @@ struct SponsorView: View {
         FirmaService.fetchNearbyCompanies(
             latitude: coordinate.latitude,
             longitude: coordinate.longitude,
-            distance: selectedDistance
+            distance: selectedDistance.value ?? 0
+
         ) { result in
             DispatchQueue.main.async {
                 self.isLoading = false
@@ -87,6 +109,7 @@ struct SponsorView: View {
             }
         }
     }
+
     
     
     

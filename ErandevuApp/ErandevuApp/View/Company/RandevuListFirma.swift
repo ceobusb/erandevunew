@@ -58,7 +58,7 @@ struct RandevuListFirma: View {
     func randevuCardView(for randevu: FirmaRandevuModel) -> some View {
         VStack(alignment: .leading, spacing: 8) {
             HStack {
-                Text(randevu.firma_name ?? "Firma Adı Yok")
+                Text(randevu.customer_name ?? "Müşteri Adı Yok")
                     .font(.headline)
                     .foregroundColor(.primary)
                 
